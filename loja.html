@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIFE VITAMINS — Loja de Suplementos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:#222;background:#fff}
+a{color:#41591F}header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 16px}
+header img.logo{height:42px;width:auto}header .brand{font-family:"Playfair Display",Georgia,serif;font-size:22px;letter-spacing:2px;color:#1f3d1f;flex:1}
+header button,.btn{border:1px solid #222;background:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:14px}
+.btn-green{background:#41591F;color:#fff;border-color:#41591F}.btn-grad{background:linear-gradient(135deg,#d63384,#5b2a86);color:#fff;border:0}
+main{max-width:1100px;margin:0 auto;padding:0 16px 60px}
+.hero{text-align:center;padding:28px 10px 8px}.hero h1{font-family:"Playfair Display",Georgia,serif;font-size:34px;margin:8px 0}.hero p{color:#666;margin:0 0 16px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:14px 0 20px}
+.filters button{border:1px solid #ccc;background:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:13px}
+.filters button.active{background:#41591F;color:#fff;border-color:#41591F}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:768px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{border:1px solid #eee;border-radius:16px;overflow:hidden;text-align:center;padding-bottom:14px;background:#fff}
+.card img{width:100%;height:200px;object-fit:contain;background:#fafafa;display:block}
+.card h3{font-size:15px;margin:10px 8px 4px;min-height:40px}.serves{font-size:13px;color:#666;margin:0 8px 6px;min-height:36px}
+.price{display:inline-block;font-size:17px;font-weight:700;color:#fff;background:#41591F;padding:4px 14px;border-radius:999px;margin:6px 0}
+.stock{font-size:13px;color:#b3261e;font-weight:600;margin:4px 0}
+.card .actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.view{display:none}.view.on{display:block}
+.auth{max-width:420px;margin:40px auto;text-align:center}.auth input{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:12px;font-size:16px}
+.auth h2{font-family:"Playfair Display",Georgia,serif}
+.drawer{position:fixed;top:0;right:0;width:380px;max-width:92vw;height:100%;background:#fff;border-left:1px solid #eee;z-index:40;padding:18px;overflow:auto;transform:translateX(105%);transition:transform .25s}
+.drawer.open{transform:none}.cartline{display:flex;gap:10px;align-items:center;border-bottom:1px solid #f0f0f0;padding:10px 0}
+.cartline img{width:56px;height:56px;object-fit:contain}.qty button{padding:4px 10px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex}.box{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:20px;text-align:center;max-height:90vh;overflow:auto}
+.box img{width:100%;max-height:320px;object-fit:contain;background:#fafafa;border-radius:12px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:60}
+.overlay.open{display:flex}.overlay .box{max-width:420px}
+.chatbox{max-width:640px;margin:20px auto;border:1px solid #eee;border-radius:16px;overflow:hidden}
+.chatmsgs{height:420px;overflow:auto;padding:16px;background:#f7f5f0;display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:80%;padding:10px 14px;border-radius:16px;line-height:1.4}
+.bubble.me{background:#d9f2c2;align-self:flex-end}.bubble.them{background:#fff;align-self:flex-start;border:1px solid #eee}
+.bubble img,.bubble video{max-width:100%;border-radius:10px;display:block;margin-top:6px}
+.chatinput{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;align-items:center}
+.chatinput input[type=text]{flex:1;padding:10px;border:1px solid #ccc;border-radius:999px}
+.wa{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;z-index:30;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.adminrow{border:1px solid #eee;border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:8px}
+.adminrow input,.adminrow select{padding:8px;border:1px solid #ccc;border-radius:8px;width:100%}
+label{font-size:13px;color:#555}input[type=text],input[type=email],input[type=password],input[type=number],input[type=tel],select{padding:10px;border:1px solid #ccc;border-radius:10px;font-size:15px}
+.field{margin:10px 0}.field label{display:block;margin-bottom:4px}.field input,.field select{width:100%}
+.foot{text-align:center;padding:30px 20px;color:#666;border-top:1px solid #eee}
+@media(max-width:767px){.card img{height:160px}header .brand{font-size:18px}.hero h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header>
+<img class="logo" id="siteLogo" src="images/life-sphere-logo.png" alt="">
+<span class="brand">LIFE VITAMINS</span>
+<button onclick="showView('shop')">Loja</button>
+<button onclick="showView('chat')">Chat</button>
+<button onclick="showView('admin')">Admin</button>
+<button onclick="showView('auth')" id="authBtn">Entrar</button>
+<button onclick="openCart()">Carrinho (<span id="cartCount">0</span>)</button>
+</header>
+
+<main>
+<!-- SHOP -->
+<section id="view-shop" class="view on">
+<div class="hero"><h1 id="shopTitle">Suplementos</h1><p id="shopSub">Escolhe por categoria e vê os detalhes de cada suplemento.</p></div>
+<div class="filters" id="filters">
+<button class="active" data-cat="todos">Todos</button>
+<button data-cat="capilar">Capilar</button>
+<button data-cat="energia">Energia</button>
+<button data-cat="foco">Foco</button>
+<button data-cat="sono">Sono</button>
+<button data-cat="digestao">Digestão</button>
+<button data-cat="imunidade">Imunidade</button>
+<button data-cat="pele">Pele</button>
+<button data-cat="ossos">Ossos</button>
+<button data-cat="articulacoes">Articulações</button>
+<button data-cat="geral">Geral</button>
+</div>
+<div class="grid" id="grid"></div>
+</section>
+
+<!-- AUTH -->
+<section id="view-auth" class="view">
+<div class="auth">
+<h2 id="authTitle">Entrar</h2>
+<p id="authMsg" style="color:#666"></p>
+<input type="email" id="authEmail" placeholder="Email" autocomplete="email">
+<input type="password" id="authPass" placeholder="Palavra-passe" autocomplete="current-password">
+<button class="btn-green btn" style="width:100%;padding:12px" onclick="doLogin()">Entrar</button>
+<p style="margin:14px 0 4px">Ainda não tens conta?</p>
+<button class="btn" style="width:100%;padding:12px" onclick="doSignup()">Criar conta</button>
+<p style="color:#666;font-size:13px;margin-top:16px">A conta permite concluir compras e acompanhar encomendas.</p>
+</div>
+</section>
+
+<!-- CHECKOUT -->
+<section id="view-checkout" class="view">
+<h2 style="font-family:'Playfair Display',Georgia,serif">Finalizar compra</h2>
+<div id="checkoutSummary"></div>
+<div class="field"><label>Entrega</label>
+<label style="display:block;margin:6px 0"><input type="radio" name="del" value="maputo" checked onchange="renderCheckout()"> Maputo — 150 MT · após o pagamento, em horário de expediente</label>
+<label style="display:block;margin:6px 0"><input type="radio" name="del" value="matola" onchange="renderCheckout()"> Matola — 200 MT · após o pagamento, em horário de expediente</label>
+<label style="display:block;margin:6px 0"><input type="radio" name="del" value="provincias" onchange="renderCheckout()"> Províncias — 350 MT · pelo portador diário, 2 a 5 dias úteis após o pagamento</label>
+</div>
+<div class="field"><label>Número M-Pesa</label><input type="tel" id="mpesaPhone" placeholder="84xxxxxxx"></div>
+<div style="border:1px solid #eee;border-radius:12px;padding:14px;margin:14px 0">
+<strong>Pagamento M-Pesa via Zumbo</strong>
+<p style="color:#666">Ao confirmar, a encomenda fica registada e o pagamento M-Pesa segue para confirmação. Receberás a confirmação da encomenda com o número da encomenda.</p>
+</div>
+<div id="checkoutTotal" style="font-size:20px;font-weight:700;margin:12px 0"></div>
+<button class="btn-grad btn" style="width:100%;padding:14px" onclick="placeOrder()">Confirmar encomenda</button>
+<div id="orderDone" style="display:none;border:1px solid #cfe8b8;border-radius:12px;padding:18px;margin-top:16px;text-align:center">
+<h3>Encomenda registada</h3><p id="orderInfo"></p><p style="color:#666">Pagamento M-Pesa a confirmar. A entrega segue após o pagamento, em horário de expediente.</p>
+<button class="btn" onclick="showView('shop')">Continuar a comprar</button>
+</div>
+</section>
+
+<!-- CHAT -->
+<section id="view-chat" class="view">
+<h2 style="font-family:'Playfair Display',Georgia,serif;text-align:center">Chat</h2>
+<p style="text-align:center;color:#666">Fala connosco sobre os produtos e as encomendas.</p>
+<div class="chatbox"><div class="chatmsgs" id="chatmsgs"></div>
+<div class="chatinput">
+<input type="file" id="chatFile" accept="image/*,video/*,.pdf,.doc,.docx" style="display:none" onchange="sendFile(this)">
+<button class="btn" onclick="document.getElementById('chatFile').click()">📎</button>
+<button class="btn" id="recBtn" onclick="toggleRec()">🎤</button>
+<input type="text" id="chatText" placeholder="Escreve uma mensagem..." onkeydown="if(event.key==='Enter')sendText()">
+<button class="btn-green btn" onclick="sendText()">Enviar</button>
+</div></div>
+</section>
+
+<!-- ADMIN -->
+<section id="view-admin" class="view">
+<h2 style="font-family:'Playfair Display',Georgia,serif">Admin</h2>
+<div id="adminGate">
+<p style="color:#666">Indica o email de admin para abrir o painel.</p>
+<input type="email" id="adminEmail" placeholder="Email de admin" style="width:100%;max-width:420px">
+<button class="btn-green btn" style="margin-top:10px" onclick="openAdmin()">Abrir painel</button>
+<p id="adminErr" style="color:#b3261e"></p>
+</div>
+<div id="adminPanel" style="display:none">
+<div class="field"><label>Título da loja</label><input type="text" id="txtTitle"></div>
+<div class="field"><label>Subtítulo da loja</label><input type="text" id="txtSub"></div>
+<div class="field"><label>Link do grupo WhatsApp</label><input type="text" id="txtWa"></div>
+<div class="field"><label>Logo do site (ficheiro)</label><input type="file" id="logoFile" accept="image/*" onchange="uploadLogo(this)"></div>
+<button class="btn-green btn" onclick="saveTexts()">Guardar textos e link</button>
+<h3>Produtos</h3>
+<div id="adminList"></div>
+<h3>Adicionar produto</h3>
+<div class="field"><label>Nome</label><input type="text" id="newName"></div>
+<div class="field"><label>Preço (MT, só número)</label><input type="number" id="newPrice"></div>
+<div class="field"><label>Stock</label><input type="number" id="newStock" value="2"></div>
+<div class="field"><label>O que serve</label><input type="text" id="newServes"></div>
+<div class="field"><label>Categoria</label><select id="newCat"><option value="capilar">Capilar</option><option value="energia">Energia</option><option value="foco">Foco</option><option value="sono">Sono</option><option value="digestao">Digestão</option><option value="imunidade">Imunidade</option><option value="pele">Pele</option><option value="ossos">Ossos</option><option value="articulacoes">Articulações</option><option value="geral">Geral</option></select></div>
+<button class="btn-green btn" onclick="addProduct()">Adicionar produto</button>
+</div>
+</section>
+</main>
+
+<div class="foot">LIFE VITAMINS • Suplementos</div>
+
+<!-- CART DRAWER -->
+<div class="drawer" id="drawer">
+<button class="btn" onclick="closeCart()">Fechar</button>
+<h3>Carrinho</h3><div id="cartItems"></div>
+<div id="cartSub" style="font-weight:700;margin:14px 0"></div>
+<button class="btn-grad btn" style="width:100%;padding:12px" onclick="goCheckout()">Finalizar compra</button>
+</div>
+
+
+<!-- WHATSAPP GROUP OVERLAY -->
+<div class="overlay" id="waOverlay"><div class="box">
+<button class="btn" style="float:right" onclick="closeWa()">×</button>
+<h2>Novidades primeiro no grupo</h2>
+<p style="color:#666">Entra no grupo de WhatsApp para ver os produtos novos assim que chegam.</p>
+<a class="btn-green btn" id="waGroupLink" href="#" style="display:inline-block;text-decoration:none;padding:12px 22px">Entrar no grupo WhatsApp</a>
+<p><button class="btn" onclick="closeWa()">Agora não</button></p>
+</div></div>
+
+<a class="wa" id="waFloat" href="#" aria-label="WhatsApp">💬</a>
+
+<script>
+const ADMIN_EMAIL="tejore8910@stosan.com";
+const DELIVERY={maputo:{label:"Maputo",cost:150,note:"após o pagamento, em horário de expediente"},matola:{label:"Matola",cost:200,note:"após o pagamento, em horário de expediente"},provincias:{label:"Províncias",cost:350,note:"pelo portador diário, 2 a 5 dias úteis após o pagamento"}};
+const DEFAULT_PRODUCTS=[{"id": 1, "name": "AG1", "img": "images/sup-ag1.jpg", "cat": "geral", "price": "3.850 MT", "serves": "Multivitamínico diário completo", "details": "Suplemento verde diário, para uma rotina completa de vitaminas e minerais.", "stock": 1}, {"id": 2, "name": "Magnésio SUKU", "img": "images/sup-magnesio.jpg", "cat": "sono", "price": "1.850 MT", "serves": "Relaxamento, músculos e sono", "details": "Magnésio para relaxar os músculos, acalmar e ajudar a dormir melhor.", "stock": 2}, {"id": 3, "name": "NAD+ Cata-Kor", "img": "images/sup-nad.jpg", "cat": "energia", "price": "3.450 MT", "serves": "Energia e longevidade", "details": "NAD+ para energia celular e apoio à longevidade.", "stock": 3}, {"id": 4, "name": "Focus+ Emrald Labs", "img": "images/sup-focus.jpg", "cat": "foco", "price": "2.450 MT", "serves": "Foco e concentração", "details": "Fórmula para foco e concentração no dia a dia.", "stock": 1}, {"id": 5, "name": "Meno Brain Health", "img": "images/sup-meno.jpg", "cat": "foco", "price": "2.650 MT", "serves": "Memória e saúde cerebral", "details": "Apoio à memória e à saúde do cérebro.", "stock": 2}, {"id": 6, "name": "Goli Probiotics", "img": "images/sup-goli.jpg", "cat": "digestao", "price": "2.350 MT", "serves": "Probióticos e digestão", "details": "Probióticos em gomas para a digestão e o equilíbrio intestinal.", "stock": 3}, {"id": 7, "name": "Lune Melatonina", "img": "images/sup-lune.jpg", "cat": "sono", "price": "1.950 MT", "serves": "Sono tranquilo", "details": "Melatonina para adormecer melhor e ter noites mais calmas.", "stock": 1}, {"id": 8, "name": "Golly Colagénio", "img": "images/sup-golly.jpg", "cat": "pele", "price": "2.450 MT", "serves": "Colagénio e pele", "details": "Colagénio para a pele, cabelo e unhas.", "stock": 2}, {"id": 9, "name": "Feel Hair Support", "img": "images/sup-feel-hair.jpg", "cat": "capilar", "price": "2.350 MT", "serves": "Cabelo forte e saudável", "details": "Apoio ao cabelo, para um cabelo mais forte e saudável.", "stock": 3}, {"id": 10, "name": "Mitopure Timeline", "img": "images/sup-mitopure.jpg", "cat": "energia", "price": "3.650 MT", "serves": "Energia celular", "details": "Mitopure para a energia das células e a recuperação.", "stock": 1}, {"id": 11, "name": "BPC-157 Peak Human", "img": "images/sup-bpc.jpg", "cat": "energia", "price": "2.950 MT", "serves": "Recuperação e treino", "details": "Para a recuperação depois do treino e o apoio muscular.", "stock": 2}, {"id": 12, "name": "Chill Pill", "img": "images/sup-chill-pill.jpg", "cat": "sono", "price": "2.150 MT", "serves": "Calma e relaxamento", "details": "Para acalmar, relaxar e aliviar o stress do dia.", "stock": 3}, {"id": 13, "name": "Ancient Omegas", "img": "images/sup-omega.jpg", "cat": "geral", "price": "2.650 MT", "serves": "Ómega para coração e cérebro", "details": "Ómegas essenciais para o coração, o cérebro e o bem-estar geral.", "stock": 1}, {"id": 14, "name": "Purna Mama Bear", "img": "images/sup-purna.jpg", "cat": "geral", "price": "2.350 MT", "serves": "Para mamãs", "details": "Suplemento pensado para mamãs, para o dia a dia.", "stock": 2}, {"id": 15, "name": "Glutationa", "img": "images/sup-glutathione-deitar.jpg", "cat": "pele", "price": "2.850 MT", "serves": "Antioxidante e pele luminosa", "details": "Glutationa, antioxidante para uma pele mais luminosa.", "stock": 3}, {"id": 16, "name": "Vida Glow Hairology", "img": "images/sup-vidaglow-hair.jpg", "cat": "capilar", "price": "2.850 MT", "serves": "Cabelo e brilho", "details": "Vida Glow para o cabelo, brilho e cuidado capilar.", "stock": 1}, {"id": 17, "name": "Nutriplus by Farmasi", "img": "images/sup-nutriplus.jpg", "cat": "geral", "price": "2.850 MT", "serves": "Suplemento diário completo", "details": "Nutriplus, suplemento diário completo para o bem-estar.", "stock": 2}, {"id": 18, "name": "Whey Protein Isolate", "img": "images/sup-whey.jpg", "cat": "energia", "price": "3.250 MT", "serves": "Proteína para treino e músculo", "details": "Proteína isolada para o treino, a recuperação e o músculo.", "stock": 3}, {"id": 19, "name": "Seed DS-01 Simbiótico", "img": "images/sup-seed.jpg", "cat": "digestao", "price": "2.750 MT", "serves": "Simbiótico diário", "details": "Simbiótico diário com prebióticos e probióticos para a digestão.", "stock": 1}, {"id": 20, "name": "TrueBrain Nootropic", "img": "images/sup-truebrain.jpg", "cat": "foco", "price": "2.450 MT", "serves": "Foco e memória", "details": "Nootrópico para foco, clareza e memória.", "stock": 2}, {"id": 21, "name": "NOON Focus + Chill", "img": "images/sup-noon.jpg", "cat": "foco", "price": "2.150 MT", "serves": "Foco e calma", "details": "Gomas para foco e calma, sem agitação.", "stock": 3}, {"id": 22, "name": "THE NUE CO Pre + Probiotic", "img": "images/sup-nueco1.jpg", "cat": "digestao", "price": "2.650 MT", "serves": "Prebióticos e probióticos", "details": "Prebióticos e probióticos para a saúde intestinal.", "stock": 1}, {"id": 23, "name": "ODYN", "img": "images/sup-odyn.jpg", "cat": "geral", "price": "2.350 MT", "serves": "Suplemento diário", "details": "Suplemento diário para o bem-estar geral.", "stock": 2}, {"id": 24, "name": "Proper Immune Support", "img": "images/sup-proper.jpg", "cat": "imunidade", "price": "2.450 MT", "serves": "Apoio imunitário", "details": "Pó superalimento com vitamina C, sabugueiro e papaia, para o apoio imunitário.", "stock": 3}, {"id": 25, "name": "SinoPlaSan Meno Wunder + Venen Balance", "img": "images/sup-sinoplasam.jpg", "cat": "geral", "price": "2.850 MT", "serves": "Equilíbrio e circulação", "details": "Meno Wunder e Venen Balance, com folhas de videira vermelha e castanha-da-índia, 120 cápsulas.", "stock": 1}, {"id": 26, "name": "VIDA GLOW", "img": "images/sup-vidaglow-verde.jpg", "cat": "capilar", "price": "2.850 MT", "serves": "Cabelo e brilho", "details": "VIDA GLOW em frasco verde, cápsulas para o cabelo e o brilho.", "stock": 2}, {"id": 27, "name": "ELLAVita D3", "img": "images/sup-ellavita-d3.jpg", "cat": "ossos", "price": "1.950 MT", "serves": "Vitamina D3 + óleo de coco", "details": "Vitamina D3 5000IU com óleo de coco, 60 softgels, suplemento alimentar.", "stock": 3}, {"id": 28, "name": "energybits Espirulina", "img": "images/sup-energybits-tubo.jpg", "cat": "energia", "price": "2.750 MT", "serves": "Foco, fitness e energia", "details": "Comprimidos de espirulina para foco, fitness e energia, 360 comprimidos.", "stock": 1}, {"id": 29, "name": "VIBE OXIGLOW", "img": "images/sup-vibe-oxiglow.jpg", "cat": "pele", "price": "2.450 MT", "serves": "Saquetas verdes", "details": "Saquetas VIBE OXIGLOW, suplemento em saqueta individual.", "stock": 2}, {"id": 30, "name": "MAXX", "img": "images/sup-maxx.jpg", "cat": "energia", "price": "3.150 MT", "serves": "Pré-treino, creatina e BCAA", "details": "MAXX: pré-treino, creatina pura e BCAA, para treino e recuperação.", "stock": 3}, {"id": 31, "name": "AEMIS SPIRO PLUS", "img": "images/sup-aemis-spiro.jpg", "cat": "digestao", "price": "2.550 MT", "serves": "Enzimas digestivas e espirulina", "details": "Pastilhas mastigáveis com enzimas digestivas, espirulina azul e espirulina verde.", "stock": 1}, {"id": 32, "name": "HAIROLOGY VIDA GLOW", "img": "images/sup-hairology-vidaglow.jpg", "cat": "capilar", "price": "2.850 MT", "serves": "Cabelo, reparação avançada", "details": "HAIROLOGY Advanced Repair, cápsulas para o cabelo, 30 cápsulas.", "stock": 2}, {"id": 33, "name": "Vitaminicum Ferro Max", "img": "images/sup-vitaminicum-ferro.jpg", "cat": "imunidade", "price": "1.850 MT", "serves": "Ferro e vitaminas extra", "details": "Ferro com LIPOFER, fonte de ferro e vitaminas extra, para cansaço e fadiga, imunidade e hemoglobina, 30 comprimidos.", "stock": 3}, {"id": 34, "name": "Vitamina C 1000mg", "img": "images/sup-proper.jpg", "cat": "imunidade", "price": "1.650 MT", "serves": "Imunidade e energia", "details": "Vitamina C para a imunidade, a energia e a proteção antioxidante.", "stock": 2}, {"id": 35, "name": "Vitamina D3 5000IU", "img": "images/sup-ellavita-d3.jpg", "cat": "ossos", "price": "1.950 MT", "serves": "Ossos fortes e imunidade", "details": "Vitamina D3 com óleo de coco para ossos fortes e imunidade.", "stock": 3}, {"id": 36, "name": "Cálcio + Vitamina D", "img": "images/sup-magnesio.jpg", "cat": "ossos", "price": "1.750 MT", "serves": "Ossos e dentes fortes", "details": "Cálcio com vitamina D para ossos e dentes fortes.", "stock": 2}, {"id": 37, "name": "Ferro + Ácido Fólico", "img": "images/sup-vitaminicum-ferro.jpg", "cat": "geral", "price": "1.850 MT", "serves": "Contra o cansaço", "details": "Ferro com ácido fólico para a energia e o sangue saudável.", "stock": 1}, {"id": 38, "name": "Zinco 50mg", "img": "images/sup-nad.jpg", "cat": "imunidade", "price": "1.450 MT", "serves": "Imunidade e pele", "details": "Zinco para a imunidade, a pele e a recuperação.", "stock": 3}, {"id": 39, "name": "Ómega 3 Peixe", "img": "images/sup-omega.jpg", "cat": "geral", "price": "2.450 MT", "serves": "Coração e cérebro", "details": "Ómega 3 de peixe para o coração, o cérebro e a visão.", "stock": 2}, {"id": 40, "name": "Probiótico 50 Mil Milhões", "img": "images/sup-goli.jpg", "cat": "digestao", "price": "2.850 MT", "serves": "Flora intestinal equilibrada", "details": "Probiótico de alta potência para a flora intestinal e a digestão.", "stock": 2}, {"id": 41, "name": "Colagénio Hidrolisado", "img": "images/sup-golly.jpg", "cat": "pele", "price": "2.950 MT", "serves": "Pele firme e articulações", "details": "Colagénio hidrolisado para a pele firme, o cabelo e as articulações.", "stock": 1}, {"id": 42, "name": "Proteína Whey Chocolate", "img": "images/sup-whey.jpg", "cat": "energia", "price": "3.450 MT", "serves": "Músculo e recuperação", "details": "Proteína whey sabor chocolate para o músculo e a recuperação pós-treino.", "stock": 3}, {"id": 43, "name": "Creatina Monohidratada", "img": "images/sup-maxx.jpg", "cat": "energia", "price": "2.650 MT", "serves": "Força e desempenho", "details": "Creatina monohidratada para a força, a potência e o desempenho.", "stock": 2}, {"id": 44, "name": "BCAA 2:1:1", "img": "images/sup-maxx.jpg", "cat": "energia", "price": "2.350 MT", "serves": "Recuperação muscular", "details": "BCAA para a recuperação muscular e a proteção do músculo.", "stock": 3}, {"id": 45, "name": "Magnésio Glicinato", "img": "images/sup-magnesio.jpg", "cat": "sono", "price": "1.950 MT", "serves": "Sono profundo e relaxamento", "details": "Magnésio glicinato para o sono profundo, o relaxamento e os músculos.", "stock": 2}, {"id": 46, "name": "Melatonina 5mg", "img": "images/sup-lune.jpg", "cat": "sono", "price": "1.650 MT", "serves": "Adormecer rápido", "details": "Melatonina para adormecer mais rápido e regular o sono.", "stock": 1}, {"id": 47, "name": "Biotina Cabelo", "img": "images/sup-feel-hair.jpg", "cat": "capilar", "price": "1.850 MT", "serves": "Cabelo, pele e unhas", "details": "Biotina para o cabelo forte, a pele e as unhas.", "stock": 2}, {"id": 48, "name": "Vitamina E Pele", "img": "images/sup-glutathione-deitar.jpg", "cat": "pele", "price": "1.750 MT", "serves": "Pele luminosa e antioxidante", "details": "Vitamina E antioxidante para uma pele luminosa e protegida.", "stock": 3}, {"id": 49, "name": "Multivitamínico Mulher", "img": "images/sup-nutriplus.jpg", "cat": "geral", "price": "2.150 MT", "serves": "Energia diária completa", "details": "Multivitamínico diário formulado para a mulher, energia e bem-estar.", "stock": 2}, {"id": 50, "name": "Multivitamínico Homem", "img": "images/sup-ag1.jpg", "cat": "geral", "price": "2.150 MT", "serves": "Energia e vitalidade", "details": "Multivitamínico diário formulado para o homem, energia e vitalidade.", "stock": 3}, {"id": 51, "name": "Glucosamina Articulações", "img": "images/sup-bpc.jpg", "cat": "articulacoes", "price": "2.450 MT", "serves": "Articulações flexíveis", "details": "Glucosamina para articulações flexíveis e confortáveis.", "stock": 2}, {"id": 52, "name": "Curcumina + Pimenta Preta", "img": "images/sup-chill-pill.jpg", "cat": "articulacoes", "price": "1.950 MT", "serves": "Articulações e conforto", "details": "Curcumina com pimenta preta para o conforto das articulações.", "stock": 1}, {"id": 53, "name": "Luteína Visão", "img": "images/sup-mitopure.jpg", "cat": "geral", "price": "2.150 MT", "serves": "Saúde dos olhos", "details": "Luteína para a saúde dos olhos e a proteção da visão.", "stock": 2}, {"id": 54, "name": "Ashwagandha KSM-66", "img": "images/sup-noon.jpg", "cat": "foco", "price": "2.350 MT", "serves": "Calma, foco e stress", "details": "Ashwagandha para a calma, o foco e a gestão do stress.", "stock": 3}, {"id": 55, "name": "Ginkgo Biloba Memória", "img": "images/sup-truebrain.jpg", "cat": "foco", "price": "1.850 MT", "serves": "Memória e concentração", "details": "Ginkgo biloba para a memória, a concentração e a circulação.", "stock": 2}, {"id": 56, "name": "Espirulina Orgânica", "img": "images/sup-energybits-tubo.jpg", "cat": "energia", "price": "2.750 MT", "serves": "Energia natural", "details": "Espirulina orgânica para a energia natural e o equilíbrio.", "stock": 1}, {"id": 57, "name": "Clorela Detox", "img": "images/sup-aemis-spiro.jpg", "cat": "digestao", "price": "2.550 MT", "serves": "Detox e digestão", "details": "Clorela para o detox, a digestão e o bem-estar diário.", "stock": 2}, {"id": 58, "name": "Vitamina B Complexo", "img": "images/sup-seed.jpg", "cat": "energia", "price": "1.650 MT", "serves": "Energia e sistema nervoso", "details": "Complexo B para a energia, o sistema nervoso e o cansaço.", "stock": 3}, {"id": 59, "name": "Ácido Hialurónico Pele", "img": "images/sup-golly.jpg", "cat": "pele", "price": "2.850 MT", "serves": "Hidratação da pele", "details": "Ácido hialurónico para a hidratação e a firmeza da pele.", "stock": 2}];
+let products=loadProducts();
+let cart=JSON.parse(localStorage.getItem("lv_cart_v1")||"{}");
+let filter="todos";
+function loadProducts(){try{const s=localStorage.getItem("lv_products_v1");if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)return p;}}catch(e){}return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));}
+function saveProducts(){try{localStorage.setItem("lv_products_v1",JSON.stringify(products));}catch(e){}}
+function saveCart(){try{localStorage.setItem("lv_cart_v1",JSON.stringify(cart));}catch(e){}updateCartCount();}
+function priceNum(p){return parseFloat(String(p.price).replace(/[^\d.]/g,""))||0;}
+function fmt(n){return n.toLocaleString("pt-PT").replace(/,/g,".")+" MT";}
+function getUser(){try{return JSON.parse(localStorage.getItem("lv_user")||"null");}catch(e){return null;}}
+function setUser(u){try{localStorage.setItem("lv_user",JSON.stringify(u));}catch(e){}refreshAuthBtn();}
+function hashPw(s){let h=5381;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))>>>0;}return String(h);}
+function getUsers(){try{return JSON.parse(localStorage.getItem("lv_users")||"{}");}catch(e){return {};}}
+function refreshAuthBtn(){const u=getUser();document.getElementById("authBtn").textContent=u?u.email.split("@")[0]:"Entrar";}
+function showView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));document.getElementById("view-"+v).classList.add("on");closeCart();window.scrollTo(0,0);if(v==="checkout")renderCheckout();if(v==="chat")renderChat();if(v==="admin"&&document.getElementById("adminPanel").style.display==="block")renderAdmin();}
+function renderGrid(){
+  const g=document.getElementById("grid");g.innerHTML="";
+  products.filter(p=>filter==="todos"||p.cat===filter).forEach(p=>{
+    const d=document.createElement("div");d.className="card";
+    d.innerHTML='<img src="'+p.img+'" alt="'+p.name.replace(/"/g,"")+'" loading="lazy"><h3>'+p.name+'</h3><p class="serves">'+p.serves+'</p><span class="price">'+p.price+'</span>'+(p.stock<=3?'<div class="stock">Só restam '+p.stock+'!</div>':'<div class="stock" style="color:#555">Stock: '+p.stock+'</div>')+'<div class="actions"><a class="btn" style="text-decoration:none;color:#222" href="produto.html?p='+p.id+'">Ver detalhes</a><button class="btn-green btn" onclick="addToCart('+p.id+')">Adicionar</button></div>';
+    g.appendChild(d);
+  });
+}
+document.querySelectorAll("#filters button").forEach(b=>{b.onclick=()=>{document.querySelectorAll("#filters button").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.cat;renderGrid();};});
+
+function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;const q=cart[id]||0;if(q>=p.stock){alert("Só restam "+p.stock+" unidades deste produto.");return;}cart[id]=q+1;saveCart();}
+function updateCartCount(){let n=0;for(const k in cart)n+=cart[k];document.getElementById("cartCount").textContent=n;}
+function openCart(){renderCart();document.getElementById("drawer").classList.add("open");}
+function closeCart(){document.getElementById("drawer").classList.remove("open");}
+function renderCart(){const el=document.getElementById("cartItems");el.innerHTML="";let sub=0;for(const id in cart){const p=products.find(x=>x.id===Number(id));if(!p)continue;const q=cart[id];sub+=priceNum(p)*q;const row=document.createElement("div");row.className="cartline";row.innerHTML='<img src="'+p.img+'" alt=""><div style="flex:1"><strong>'+p.name+'</strong><br>'+p.price+'</div><div class="qty"><button onclick="changeQty('+id+',-1)">−</button> '+q+' <button onclick="changeQty('+id+',1)">+</button></div><button onclick="removeItem('+id+')">✕</button>';el.appendChild(row);}document.getElementById("cartSub").textContent="Subtotal: "+fmt(sub);}
+function changeQty(id,d){const p=products.find(x=>x.id===Number(id));let q=(cart[id]||0)+d;if(d>0&&p&&q>p.stock){alert("Só restam "+p.stock+" unidades.");return;}if(q<=0)delete cart[id];else cart[id]=q;saveCart();renderCart();}
+function removeItem(id){delete cart[id];saveCart();renderCart();}
+function goCheckout(){closeCart();if(!getUser()){document.getElementById("authMsg").textContent="Cria a tua conta para concluir a compra.";showView("auth");return;}showView("checkout");}
+function getDel(){const r=document.querySelector('input[name="del"]:checked');return DELIVERY[r?r.value:"maputo"];}
+function renderCheckout(){let sub=0,html="";for(const id in cart){const p=products.find(x=>x.id===Number(id));if(!p)continue;sub+=priceNum(p)*cart[id];html+="<div>"+p.name+" × "+cart[id]+" — "+fmt(priceNum(p)*cart[id])+"</div>";}const d=getDel();document.getElementById("checkoutSummary").innerHTML=html||"<p>O carrinho está vazio.</p>";document.getElementById("checkoutTotal").textContent="Entrega ("+d.label+"): "+fmt(d.cost)+" · "+d.note+" — Total: "+fmt(sub+d.cost);}
+function placeOrder(){if(!getUser()){showView("auth");return;}if(Object.keys(cart).length===0){alert("O carrinho está vazio.");return;}const phone=document.getElementById("mpesaPhone").value.trim();if(phone.length<9){alert("Indica o número M-Pesa.");return;}const d=getDel();let sub=0;for(const id in cart){const p=products.find(x=>x.id===Number(id));if(p)sub+=priceNum(p)*cart[id];}const num="LV-"+String(Date.now()).slice(-6);document.getElementById("orderInfo").textContent="Encomenda "+num+" · Total "+fmt(sub+d.cost)+" · Entrega: "+d.label+" ("+d.note+").";document.getElementById("orderDone").style.display="block";cart={};saveCart();renderCart();}
+function doSignup(){const e=document.getElementById("authEmail").value.trim().toLowerCase();const pw=document.getElementById("authPass").value;if(!e||pw.length<4){alert("Indica um email e uma palavra-passe com pelo menos 4 caracteres.");return;}const users=getUsers();if(users[e]){alert("Já existe uma conta com esse email. Entra com a palavra-passe.");return;}users[e]=hashPw(pw);try{localStorage.setItem("lv_users",JSON.stringify(users));}catch(err){}setUser({email:e});document.getElementById("authMsg").textContent="Conta criada. Bem-vindo(a).";showView("shop");}
+function doLogin(){const e=document.getElementById("authEmail").value.trim().toLowerCase();const pw=document.getElementById("authPass").value;const users=getUsers();if(users[e]&&users[e]===hashPw(pw)){setUser({email:e});document.getElementById("authMsg").textContent="";showView("shop");}else{alert("Email ou palavra-passe incorretos. Se ainda não tens conta, cria uma.");}}
+function getChat(){try{return JSON.parse(localStorage.getItem("lv_chat_v1")||"[]");}catch(e){return [];}}
+function saveChat(m){try{localStorage.setItem("lv_chat_v1",JSON.stringify(m));}catch(e){}}
+function renderChat(){const el=document.getElementById("chatmsgs");el.innerHTML="";getChat().forEach(m=>{const d=document.createElement("div");d.className="bubble "+(m.me?"me":"them");if(m.text)d.innerHTML="";if(m.text){const t=document.createElement("div");t.textContent=m.text;d.appendChild(t);}if(m.media){if(m.mtype&&m.mtype.indexOf("image")===0){const im=document.createElement("img");im.src=m.media;d.appendChild(im);}else if(m.mtype&&m.mtype.indexOf("video")===0){const v=document.createElement("video");v.src=m.media;v.controls=true;d.appendChild(v);}else if(m.mtype&&m.mtype.indexOf("audio")===0){const a=document.createElement("audio");a.src=m.media;a.controls=true;d.appendChild(a);}else{const a=document.createElement("a");a.href=m.media;a.target="_blank";a.textContent="Ficheiro anexo";d.appendChild(a);}}el.appendChild(d);});el.scrollTop=el.scrollHeight;}
+function sendText(){const inp=document.getElementById("chatText");const t=inp.value.trim();if(!t)return;const m=getChat();m.push({me:true,text:t});saveChat(m);inp.value="";renderChat();}
+function sendFile(input){const f=input.files&&input.files[0];if(!f)return;const url=URL.createObjectURL(f);const m=getChat();m.push({me:true,text:"",media:url,mtype:f.type});saveChat(m);renderChat();input.value="";}
+let rec=null,recChunks=[];
+function toggleRec(){const btn=document.getElementById("recBtn");if(rec&&rec.state==="recording"){rec.stop();btn.textContent="🎤";return;}if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert("Áudio não disponível neste navegador.");return;}navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{recChunks=[];rec=new MediaRecorder(stream);rec.ondataavailable=e=>{if(e.data.size)recChunks.push(e.data);};rec.onstop=()=>{const blob=new Blob(recChunks,{type:"audio/webm"});const url=URL.createObjectURL(blob);const m=getChat();m.push({me:true,text:"",media:url,mtype:"audio/webm"});saveChat(m);renderChat();stream.getTracks().forEach(t=>t.stop());};rec.start();btn.textContent="⏹";}).catch(()=>{alert("Não foi possível aceder ao microfone.");});}
+function openAdmin(){const e=document.getElementById("adminEmail").value.trim().toLowerCase();if(e!==ADMIN_EMAIL){document.getElementById("adminErr").textContent="Email de admin incorreto.";return;}document.getElementById("adminErr").textContent="";document.getElementById("adminGate").style.display="none";document.getElementById("adminPanel").style.display="block";document.getElementById("txtTitle").value=document.getElementById("shopTitle").textContent;document.getElementById("txtSub").value=document.getElementById("shopSub").textContent;document.getElementById("txtWa").value=localStorage.getItem("lv_wa")||"#";renderAdmin();}
+function renderAdmin(){const el=document.getElementById("adminList");el.innerHTML="";products.forEach(p=>{const d=document.createElement("div");d.className="adminrow";d.innerHTML='<strong>'+p.name+'</strong><label>Nome</label><input data-f="name" data-id="'+p.id+'" value="'+p.name.replace(/"/g,"")+'"><label>Preço (MT, só número)</label><input type="number" data-f="price" data-id="'+p.id+'" value="'+priceNum(p)+'"><label>Stock</label><input type="number" data-f="stock" data-id="'+p.id+'" value="'+p.stock+'"><label>O que serve</label><input data-f="serves" data-id="'+p.id+'" value="'+p.serves.replace(/"/g,"")+'"><label>Categoria</label><select data-f="cat" data-id="'+p.id+'"><option value="capilar"'+(p.cat==="capilar"?" selected":"")+'>Capilar</option><option value="energia"'+(p.cat==="energia"?" selected":"")+'>Energia</option><option value="foco"'+(p.cat==="foco"?" selected":"")+'>Foco</option><option value="sono"'+(p.cat==="sono"?" selected":"")+'>Sono</option><option value="digestao"'+(p.cat==="digestao"?" selected":"")+'>Digestão</option><option value="imunidade"'+(p.cat==="imunidade"?" selected":"")+'>Imunidade</option><option value="pele"'+(p.cat==="pele"?" selected":"")+'>Pele</option><option value="ossos"'+(p.cat==="ossos"?" selected":"")+'>Ossos</option><option value="articulacoes"'+(p.cat==="articulacoes"?" selected":"")+'>Articulações</option><option value="geral"'+(p.cat==="geral"?" selected":"")+'>Geral</option></select><button class="btn-green btn" onclick="saveRow('+p.id+')">Guardar</button>';el.appendChild(d);});}
+function saveRow(id){const p=products.find(x=>x.id===id);if(!p)return;document.querySelectorAll('[data-id="'+id+'"]').forEach(inp=>{const f=inp.dataset.f;if(f==="name")p.name=inp.value;if(f==="serves")p.serves=inp.value;if(f==="cat")p.cat=inp.value;if(f==="price")p.price=fmtNum(inp.value);if(f==="stock")p.stock=parseInt(inp.value)||0;});saveProducts();renderGrid();}
+function fmtNum(v){const n=parseFloat(v)||0;return n.toLocaleString("pt-PT").replace(/,/g,".")+" MT";}
+function addProduct(){const name=document.getElementById("newName").value.trim();const price=document.getElementById("newPrice").value;const stock=document.getElementById("newStock").value;const serves=document.getElementById("newServes").value.trim();const cat=document.getElementById("newCat").value;if(!name||!price){alert("Indica o nome e o preço.");return;}const id=Math.max.apply(null,products.map(p=>p.id))+1;products.push({id:id,name:name,img:"images/sup-nutriplus.jpg",cat:cat,price:fmtNum(price),serves:serves||"",details:serves||"",stock:parseInt(stock)||1});saveProducts();renderGrid();renderAdmin();document.getElementById("newName").value="";document.getElementById("newPrice").value="";document.getElementById("newServes").value="";}
+function saveTexts(){document.getElementById("shopTitle").textContent=document.getElementById("txtTitle").value;document.getElementById("shopSub").textContent=document.getElementById("txtSub").value;const wa=document.getElementById("txtWa").value||"#";try{localStorage.setItem("lv_wa",wa);localStorage.setItem("lv_title",document.getElementById("txtTitle").value);localStorage.setItem("lv_sub",document.getElementById("txtSub").value);}catch(e){}applyWa();}
+function applyWa(){let wa="#";try{wa=localStorage.getItem("lv_wa")||"#";}catch(e){}document.getElementById("waGroupLink").href=wa;document.getElementById("waFloat").href=wa;}
+function uploadLogo(input){const f=input.files&&input.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{document.getElementById("siteLogo").src=r.result;try{localStorage.setItem("lv_logo",r.result);}catch(e){}};r.readAsDataURL(f);}
+function closeWa(){document.getElementById("waOverlay").classList.remove("open");}
+window.addEventListener("scroll",()=>{if(sessionStorage.getItem("lv_wa_shown"))return;if(window.scrollY>1400){sessionStorage.setItem("lv_wa_shown","1");document.getElementById("waOverlay").classList.add("open");}});
+(function init(){try{const t=localStorage.getItem("lv_title");if(t)document.getElementById("shopTitle").textContent=t;const s=localStorage.getItem("lv_sub");if(s)document.getElementById("shopSub").textContent=s;const lg=localStorage.getItem("lv_logo");if(lg)document.getElementById("siteLogo").src=lg;}catch(e){}applyWa();refreshAuthBtn();renderGrid();updateCartCount();if(location.hash==="#carrinho")openCart();})();
+</script>
+</body>
+</html>

@@ -48,7 +48,6 @@ h1{text-align:center;font-family:"Playfair Display",Georgia,serif;font-size:34px
 <button data-f="geral">Geral</button>
 </div>
 <div class="grid" id="grid"></div>
-<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeModal()">×</button><img id="mimg" src="" alt=""><h2 id="mname"></h2><div id="mprice"></div><p id="mserves"></p><p id="mdetails"></p></div></div>
 <div class="foot">LIFE VITAMINS • Suplementos</div>
 <script>
 const products=[
@@ -86,18 +85,17 @@ const products=[
 {name:"HAIROLOGY VIDA GLOW",img:"images/sup-hairology-vidaglow.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo, reparação avançada",details:"HAIROLOGY Advanced Repair, cápsulas para o cabelo, 30 cápsulas."},
 {name:"Vitaminicum Ferro Max",img:"images/sup-vitaminicum-ferro.jpg",cat:"imunidade",price:"",serves:"Ferro e vitaminas extra",details:"Ferro com LIPOFER, fonte de ferro e vitaminas extra, para cansaço e fadiga, imunidade e hemoglobina, 30 comprimidos."},
 ];
+const ID_BY_NAME={"AG1": 1, "Magnésio SUKU": 2, "NAD+ Cata-Kor": 3, "Focus+ Emrald Labs": 4, "Meno Brain Health": 5, "Goli Probiotics": 6, "Lune Melatonina": 7, "Golly Colagénio": 8, "Feel Hair Support": 9, "Mitopure Timeline": 10, "BPC-157 Peak Human": 11, "Chill Pill": 12, "Ancient Omegas": 13, "Purna Mama Bear": 14, "Glutationa": 15, "Vida Glow Hairology": 16, "Nutriplus by Farmasi": 17, "Whey Protein Isolate": 18, "Seed DS-01 Simbiótico": 19, "TrueBrain Nootropic": 20, "NOON Focus + Chill": 21, "THE NUE CO Pre + Probiotic": 22, "ODYN": 23, "Proper Immune Support": 24, "SinoPlaSan Meno Wunder + Venen Balance": 25, "VIDA GLOW": 26, "ELLAVita D3": 27, "energybits Espirulina": 28, "VIBE OXIGLOW": 29, "MAXX": 30, "AEMIS SPIRO PLUS": 31, "HAIROLOGY VIDA GLOW": 32, "Vitaminicum Ferro Max": 33, "Vitamina C 1000mg": 34, "Vitamina D3 5000IU": 35, "Cálcio + Vitamina D": 36, "Ferro + Ácido Fólico": 37, "Zinco 50mg": 38, "Ómega 3 Peixe": 39, "Probiótico 50 Mil Milhões": 40, "Colagénio Hidrolisado": 41, "Proteína Whey Chocolate": 42, "Creatina Monohidratada": 43, "BCAA 2:1:1": 44, "Magnésio Glicinato": 45, "Melatonina 5mg": 46, "Biotina Cabelo": 47, "Vitamina E Pele": 48, "Multivitamínico Mulher": 49, "Multivitamínico Homem": 50, "Glucosamina Articulações": 51, "Curcumina + Pimenta Preta": 52, "Luteína Visão": 53, "Ashwagandha KSM-66": 54, "Ginkgo Biloba Memória": 55, "Espirulina Orgânica": 56, "Clorela Detox": 57, "Vitamina B Complexo": 58, "Ácido Hialurónico Pele": 59};
 const grid=document.getElementById('grid');
 function render(f){
   grid.innerHTML='';
   products.filter(p=>f==='todos'||p.cat===f).forEach((p,i)=>{
     const d=document.createElement('div');d.className='card';
-    d.innerHTML='<img src="'+p.img+'" alt="'+p.name+'"><h3>'+p.name+'</h3><p class="serves">'+p.serves+'</p>'+(p.price?'<span class="price">'+p.price+'</span><br>':'')+'<button class="details" onclick="openModal('+products.indexOf(p)+')">Ver detalhes</button>';
+    d.innerHTML='<img src="'+p.img+'" alt="'+p.name+'"><h3>'+p.name+'</h3><p class="serves">'+p.serves+'</p>'+(p.price?'<span class="price">'+p.price+'</span><br>':'')+'<a class="details" style="text-decoration:none;color:#222" href="produto.html?p='+ID_BY_NAME[p.name]+'">Ver detalhes</a>';
     grid.appendChild(d);
   });
 }
-function openModal(i){const p=products[i];document.getElementById('mimg').src=p.img;document.getElementById('mname').textContent=p.name;document.getElementById('mprice').innerHTML=p.price?'<span class="price">'+p.price+'</span>':'';document.getElementById('mserves').textContent=p.serves;document.getElementById('mdetails').textContent=p.details;document.getElementById('modal').classList.add('open');}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+
 document.querySelectorAll('#filters button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('#filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.f);};});
 render('todos');
 </script>
