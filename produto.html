@@ -107,7 +107,7 @@ if(!p){
     +'<p class="benefit">'+esc(p.details)+' '+(CAT_BENEFIT[p.cat]||"")+'</p>'
     +stockHtml(p)
     +'<div class="qty"><button id="qminus" aria-label="Menos">−</button><span id="qval">1</span><button id="qplus" aria-label="Mais">+</button></div>'
-    +(isSoldout(p)?'<button class="btn-green" disabled style="opacity:.5">Esgotado</button>':(getUser()?'<button class="btn-green" id="addBtn">Adicionar ao carrinho</button>':'<a class="btn-green" href="loja.html#entrar" style="display:inline-block;text-decoration:none;padding:12px 22px">Entrar para comprar</a>'))
+    +(isSoldout(p)?'<button class="btn-green" disabled style="opacity:.5">Esgotado</button>':(getUser()?'<button class="btn-green" id="addBtn">Adicionar ao carrinho</button><button class="btn" id="buyBtn" style="margin-left:8px">Comprar</button>':'<a class="btn-green" href="loja.html#entrar" style="display:inline-block;text-decoration:none;padding:12px 22px">Entrar para comprar</a>'))
     +'<div class="done" id="addedMsg">Adicionado ao carrinho. <a href="loja.html#carrinho">Ver carrinho</a> · <a href="loja.html">Continuar a comprar</a></div>'
     +'<div class="delivery"><h3>Entrega</h3>'
     +'<p><strong>Maputo — 150 MT</strong> · entrega após o pagamento, em horário de expediente.</p>'
@@ -130,6 +130,13 @@ if(!p){
     cart[p.id]=Math.min(p.stock,cur+qty);
     saveCart(cart);
     document.getElementById("addedMsg").style.display="block";
+  };
+  const buyBtnEl=document.getElementById("buyBtn");
+  if(buyBtnEl)buyBtnEl.onclick=()=>{if(isSoldout(p))return;if(!getUser()){location.href="loja.html#entrar";return;}
+    const cart=getCart();
+    const cur=cart[p.id]||0;
+    if(cur<p.stock){cart[p.id]=Math.min(p.stock,cur+qty);saveCart(cart);}
+    location.href="loja.html#checkout";
   };
 }
 try{const lg=localStorage.getItem("lv_logo");if(lg)document.getElementById("siteLogo").src=lg;}catch(e){}
