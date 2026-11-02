@@ -82,10 +82,10 @@ function toggleMenu(){const n=document.getElementById("mainNav");const b=documen
 function closeMenu(){const n=document.getElementById("mainNav");if(n)n.classList.remove("open");const b=document.getElementById("burgerBtn");if(b)b.setAttribute("aria-expanded","false");}
 document.getElementById("mainNav").addEventListener("click",function(e){if(e.target.closest("a"))closeMenu();});
 document.addEventListener("click",function(e){const n=document.getElementById("mainNav");if(n&&n.classList.contains("open")&&!e.target.closest("header"))closeMenu();});
-function priceNum(p){return parseFloat(String(p.price).replace(/[^\d.]/g,""))||0;}
+function priceNum(p){return parseInt(String(p.price).replace(/[^\d]/g,""),10)||0;}
 function isSoldout(p){return p.soldout===true||p.stock<=0;}
-function hasPromo(p){const pr=parseFloat(p.promo)||0;return pr>0&&pr<priceNum(p);}
-function fmtNum(v){const n=parseFloat(v)||0;return n.toLocaleString("pt-PT").replace(/,/g,".")+" MT";}
+function hasPromo(p){const pr=parseInt(String(p.promo).replace(/[^\d]/g,""),10)||0;return pr>0&&pr<priceNum(p);}
+function fmtNum(v){const n=parseInt(String(v).replace(/[^\d]/g,""),10)||0;return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".")+" MT";}
 function priceHtml(p){if(hasPromo(p))return '<span class="oldprice">'+esc(p.price)+'</span><span class="price">'+esc(fmtNum(p.promo))+'</span>';return '<span class="price">'+esc(p.price)+'</span>';}
 function stockHtml(p){if(isSoldout(p))return '<span class="badge-soldout">Esgotado</span>';return '<div class="stock" style="color:#555">Stock: '+p.stock+'</div>';}
 const params=new URLSearchParams(location.search);
@@ -118,13 +118,15 @@ if(!p){
     +'</div></div>'
     +'<h2 class="seg">Produtos do mesmo segmento: '+(CAT_LABEL[p.cat]||p.cat)+'</h2>'
     +'<div class="grid">'+same.map(q=>'<div class="card"><img src="'+esc(q.img)+'" alt="'+esc(q.name)+'" loading="lazy"><h3>'+esc(q.name)+'</h3>'+priceHtml(q)+'<br>'+stockHtml(q)+'<br><a class="det" href="produto.html?p='+q.id+'">Ver detalhes</a></div>').join("")+'</div>';
-  document.getElementById("qminus").onclick=()=>{if(qty>1){qty--;document.getElementById("qval").textContent=qty;}};
-  document.getElementById("qplus").onclick=()=>{if(isSoldout(p))return;if(qty<p.stock){qty++;document.getElementById("qval").textContent=qty;}};
+  const syncQty=()=>{document.getElementById("qval").textContent=qty;const qp=document.getElementById("qplus");if(qp){qp.disabled=isSoldout(p)||qty>=p.stock;qp.style.opacity=(isSoldout(p)||qty>=p.stock)?".4":"1";}};
+  document.getElementById("qminus").onclick=()=>{if(qty>1){qty--;syncQty();}};
+  document.getElementById("qplus").onclick=()=>{if(isSoldout(p))return;if(qty<p.stock){qty++;syncQty();}};
+  syncQty();
   const addBtnEl=document.getElementById("addBtn");
-  if(addBtnEl)addBtnEl.onclick=()=>{if(isSoldout(p)){alert("Este produto está esgotado.");return;}if(!getUser()){location.href="loja.html#entrar";return;}
+  if(addBtnEl)addBtnEl.onclick=()=>{if(isSoldout(p))return;if(!getUser()){location.href="loja.html#entrar";return;}
     const cart=getCart();
     const cur=cart[p.id]||0;
-    if(cur>=p.stock){alert("Stock: "+p.stock+" unidades.");return;}
+    if(cur>=p.stock)return;
     cart[p.id]=Math.min(p.stock,cur+qty);
     saveCart(cart);
     document.getElementById("addedMsg").style.display="block";
