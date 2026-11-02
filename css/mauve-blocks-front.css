@@ -1,0 +1,48 @@
+/**
+ * Mauve Core blocks — front-end colour overrides for the Bootstrap accordion/tabs.
+ * Neutralises Bootstrap's default (blue) active/focus colours and lets each block's
+ * colour controls drive them via CSS custom properties. Scoped to the block wrappers
+ * (higher specificity than Bootstrap's single-class rules), so other Bootstrap
+ * accordions/tabs on the site are unaffected.
+ */
+
+/* ---- Accordion ---- */
+.wp-block-lazyblock-accordion .accordion-button {
+	color: var(--ms-acc-text, inherit);
+	background-color: var(--ms-acc-bg, transparent);
+	box-shadow: none;
+}
+.wp-block-lazyblock-accordion .accordion-button:not(.collapsed) {
+	color: var(--ms-acc-active-text, var(--ms-acc-text, inherit));
+	background-color: var(--ms-acc-active-bg, var(--ms-acc-bg, transparent));
+	box-shadow: none;
+}
+.wp-block-lazyblock-accordion .accordion-button:focus {
+	border-color: transparent;
+	box-shadow: none;
+	outline: none;
+}
+/* Recolour the chevron via CSS mask so its colour is controllable (--ms-acc-arrow).
+   Defaults to Bootstrap's dark icon colour; keeps the same icon (rotated) when open
+   instead of Bootstrap's blue active icon. */
+.wp-block-lazyblock-accordion .accordion-button::after,
+.wp-block-lazyblock-accordion .accordion-button:not(.collapsed)::after {
+	background-image: none;
+	background-color: var(--ms-acc-arrow, #212529);
+	-webkit-mask: var(--bs-accordion-btn-icon) no-repeat center / contain;
+	mask: var(--bs-accordion-btn-icon) no-repeat center / contain;
+}
+
+/* ---- Tabs ---- */
+.wp-block-lazyblock-tabs .nav-tabs .nav-link {
+	color: var(--ms-tab-text, inherit);
+}
+.wp-block-lazyblock-tabs .nav-tabs .nav-link:hover,
+.wp-block-lazyblock-tabs .nav-tabs .nav-link:focus {
+	box-shadow: none;
+	outline: none;
+}
+.wp-block-lazyblock-tabs .nav-tabs .nav-link.active {
+	color: var(--ms-tab-active-text, inherit);
+	background-color: var(--ms-tab-active-bg, transparent);
+}

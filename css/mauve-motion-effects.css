@@ -1,0 +1,560 @@
+/*
+ * Mauve Elementor - Motion Effects
+ */
+
+.mauve-scroll-floating {
+	translate: 0 var(--mauve-scroll-float-y, 0px);
+	will-change: translate;
+}
+
+/* Elementor positions absolute/fixed elements on their outer wrapper. Move
+   the inner content in that case, so floating cannot disturb that position. */
+.mauve-scroll-floating.mauve-scroll-floating--inner {
+	translate: none;
+	will-change: auto;
+}
+
+.mauve-scroll-floating.mauve-scroll-floating--inner > .elementor-widget-container,
+.mauve-scroll-floating.mauve-scroll-floating--inner > .e-con-inner {
+	translate: 0 var(--mauve-scroll-float-y, 0px);
+	will-change: translate;
+}
+
+/* Sticky Scroll Expand is applied to the Elementor wrapper itself, so it can
+   work on widgets, sections, columns and containers without changing markup. */
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready {
+	box-sizing: border-box !important;
+	will-change: height;
+}
+
+.mauve-sticky-expand-overflow-guard {
+	overflow-x: clip !important;
+	overflow-y: visible !important;
+}
+
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready.elementor-widget > .elementor-widget-container,
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready.elementor-section > .elementor-container,
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready.elementor-column > .elementor-widget-wrap,
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready > .e-con-inner {
+	height: 100%;
+	min-height: 100%;
+}
+
+/* Hero widgets normally keep their own fixed height. Let their visible stage
+   follow the animated Elementor wrapper so the top-of-page variant can grow. */
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready.elementor-widget > .elementor-widget-container > .msw-hero,
+.mauve-sticky-scroll-expand.mauve-sticky-expand-ready.elementor-widget > .elementor-widget-container > .mauve-hero {
+	width: 100%;
+	height: 100% !important;
+	min-height: 0 !important;
+}
+
+/* "Grow the background" mode: the element keeps its size and content; its background
+   (copied by the script into layers of its own, together with the overlay) starts as
+   a centred card and is scaled until it covers the element. The script only writes
+   transform and border-radius on those layers. */
+.mauve-sticky-expand-bg-ready {
+	background: none !important;
+	isolation: isolate;
+	overflow: clip !important;
+}
+.mauve-sticky-expand-bg-ready::before {
+	display: none !important;
+}
+/* Elementor containers animate their background (transition: background .3s): while the
+   script reads the colours or hands them back, a transition would start - and a colour
+   read at its start is transparent. */
+.mauve-sticky-expand-bg-still,
+.mauve-sticky-expand-bg-still::before {
+	transition: none !important;
+}
+.mauve-sticky-expand-bg-layer {
+	position: absolute;
+	z-index: -1;
+	pointer-events: none;
+}
+.mauve-sticky-expand-bg-image {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	will-change: transform;
+}
+.mauve-sticky-expand-bg-ready > .mauve-sticky-expand-bg-layer,
+.mauve-sticky-expand-bg-ready > .elementor-background-video-container,
+.mauve-sticky-expand-bg-ready > .elementor-background-slideshow {
+	inset: auto !important;
+	left: calc((100% - var(--mse-bg-w, 75%)) / 2) !important;
+	top: calc((100% - var(--mse-bg-h, 67%)) / 2) !important;
+	width: var(--mse-bg-w, 75%) !important;
+	height: var(--mse-bg-h, 67%) !important;
+	overflow: hidden;
+	transform-origin: 50% 50%;
+	will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mauve-scroll-floating {
+		translate: none;
+		will-change: auto;
+	}
+	.mauve-scroll-floating.mauve-scroll-floating--inner > .elementor-widget-container,
+	.mauve-scroll-floating.mauve-scroll-floating--inner > .e-con-inner {
+		translate: none;
+		will-change: auto;
+	}
+	.mauve-sticky-scroll-expand {
+		will-change: auto;
+	}
+}
+
+/* ------------------------------
+ * Endless Spin
+ * ------------------------------ */
+
+.animated.ms_endlessSpin {
+  --spin-speed: 10s;
+  animation-name: ms_endlessSpin;
+  animation-duration: var(--spin-speed, 10s)!important;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animated.animated-slow.ms_endlessSpin { --spin-speed: 14s; }
+.animated.animated-fast.ms_endlessSpin { --spin-speed: 5s; }
+
+@-webkit-keyframes ms_endlessSpin {
+  0% {
+    -webkit-transform:rotate(0deg);
+    transform:rotate(0deg)
+  }
+  to {
+    -webkit-transform:rotate(1turn);
+    transform:rotate(1turn)
+  }
+}
+@keyframes ms_endlessSpin {
+  0% {
+    -webkit-transform:rotate(0deg);
+    transform:rotate(0deg)
+  }
+  to {
+    -webkit-transform:rotate(1turn);
+    transform:rotate(1turn)
+  }
+}
+
+/* ------------------------------
+ * Slide In Down (Smooth)
+ * ------------------------------ */
+@-webkit-keyframes slideInDownSmooth {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, -15px, 0);
+		transform: translate3d(0, -15px, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes slideInDownSmooth {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, -15px, 0);
+		transform: translate3d(0, -15px, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+.ms_ani_slideInDownSmooth {
+	-webkit-animation-name: slideInDownSmooth;
+	animation-name: slideInDownSmooth;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+/* ------------------------------
+ * Slide Out Up (Smooth)
+ * ------------------------------ */
+@-webkit-keyframes slideOutUpSmooth {
+	0% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, -15px, 0);
+		transform: translate3d(0, -15px, 0);
+	}
+}
+@keyframes slideOutUpSmooth {
+	0% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, -15px, 0);
+		transform: translate3d(0, -15px, 0);
+	}
+}
+.ms_ani_slideOutUpSmooth {
+	-webkit-animation-name: slideOutUpSmooth;
+	animation-name: slideOutUpSmooth;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+
+/* ------------------------------
+ * Short fade variants (Mauve)
+ * ------------------------------ */
+
+/* Fade In */
+@-webkit-keyframes ms_fadeInShort {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+@keyframes ms_fadeInShort {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+.ms_ani_fadeInShort {
+	-webkit-animation-name: ms_fadeInShort;
+	animation-name: ms_fadeInShort;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+/* Fade In Up */
+@-webkit-keyframes ms_fadeInUpShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, 36px, 0);
+		transform: translate3d(0, 36px, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes ms_fadeInUpShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, 36px, 0);
+		transform: translate3d(0, 36px, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+.ms_ani_fadeInUpShort {
+	-webkit-animation-name: ms_fadeInUpShort;
+	animation-name: ms_fadeInUpShort;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+/* Fade In Down */
+@-webkit-keyframes ms_fadeInDownShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, -36px, 0);
+		transform: translate3d(0, -36px, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes ms_fadeInDownShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, -36px, 0);
+		transform: translate3d(0, -36px, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+.ms_ani_fadeInDownShort {
+	-webkit-animation-name: ms_fadeInDownShort;
+	animation-name: ms_fadeInDownShort;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+/* Fade In Left */
+@-webkit-keyframes ms_fadeInLeftShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(-36px, 0, 0);
+		transform: translate3d(-36px, 0, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes ms_fadeInLeftShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(-36px, 0, 0);
+		transform: translate3d(-36px, 0, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+.ms_ani_fadeInLeftShort {
+	-webkit-animation-name: ms_fadeInLeftShort;
+	animation-name: ms_fadeInLeftShort;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+/* Fade In Right */
+@-webkit-keyframes ms_fadeInRightShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(36px, 0, 0);
+		transform: translate3d(36px, 0, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes ms_fadeInRightShort {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(36px, 0, 0);
+		transform: translate3d(36px, 0, 0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+}
+.ms_ani_fadeInRightShort {
+	-webkit-animation-name: ms_fadeInRightShort;
+	animation-name: ms_fadeInRightShort;
+	-webkit-animation-timing-function: ease;
+	animation-timing-function: ease;
+}
+
+/* Image Tilt Reveal — 50% rise + -10deg turn, matching the editorial reference. */
+@-webkit-keyframes ms_imageTiltReveal {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, 50%, 0) rotate(-10deg);
+		transform: translate3d(0, 50%, 0) rotate(-10deg);
+	}
+	72% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -2%, 0) rotate(1deg);
+		transform: translate3d(0, -2%, 0) rotate(1deg);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0) rotate(0deg);
+		transform: translate3d(0, 0, 0) rotate(0deg);
+	}
+}
+@keyframes ms_imageTiltReveal {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0, 50%, 0) rotate(-10deg);
+		transform: translate3d(0, 50%, 0) rotate(-10deg);
+	}
+	72% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -2%, 0) rotate(1deg);
+		transform: translate3d(0, -2%, 0) rotate(1deg);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, 0, 0) rotate(0deg);
+		transform: translate3d(0, 0, 0) rotate(0deg);
+	}
+}
+.ms_ani_imageTiltReveal {
+	-webkit-animation-name: ms_imageTiltReveal;
+	animation-name: ms_imageTiltReveal;
+	-webkit-animation-timing-function: cubic-bezier(.16, 1, .3, 1);
+	animation-timing-function: cubic-bezier(.16, 1, .3, 1);
+	-webkit-transform-origin: 50% 100%;
+	transform-origin: 50% 100%;
+}
+
+/* Image Mask Reveal — the image stays in place while a vertical mask opens
+   from the top edge to the bottom edge. */
+@-webkit-keyframes ms_imageMaskRevealDown {
+	0% {
+		-webkit-clip-path: inset(0 0 100% 0);
+		clip-path: inset(0 0 100% 0);
+		-webkit-transform: scale(1.025);
+		transform: scale(1.025);
+	}
+	100% {
+		-webkit-clip-path: inset(0 0 0 0);
+		clip-path: inset(0 0 0 0);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+}
+@keyframes ms_imageMaskRevealDown {
+	0% {
+		-webkit-clip-path: inset(0 0 100% 0);
+		clip-path: inset(0 0 100% 0);
+		-webkit-transform: scale(1.025);
+		transform: scale(1.025);
+	}
+	100% {
+		-webkit-clip-path: inset(0 0 0 0);
+		clip-path: inset(0 0 0 0);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+}
+.ms_ani_imageMaskRevealDown,
+.ms_ani_imageMaskRevealUp,
+.ms_ani_imageMaskRevealRight {
+	-webkit-animation-name: ms_imageMaskRevealDown;
+	animation-name: ms_imageMaskRevealDown;
+	-webkit-animation-timing-function: cubic-bezier(.77, 0, .18, 1);
+	animation-timing-function: cubic-bezier(.77, 0, .18, 1);
+	-webkit-transform-origin: 50% 0;
+	transform-origin: 50% 0;
+	will-change: clip-path, transform;
+}
+
+@keyframes ms_imageMaskRevealUp {
+	from { clip-path: inset(100% 0 0 0); transform: scale(1.025); }
+	to { clip-path: inset(0 0 0 0); transform: scale(1); }
+}
+.ms_ani_imageMaskRevealUp {
+	-webkit-animation-name: ms_imageMaskRevealUp;
+	animation-name: ms_imageMaskRevealUp;
+	-webkit-transform-origin: 50% 100%;
+	transform-origin: 50% 100%;
+}
+
+@keyframes ms_imageMaskRevealRight {
+	from { clip-path: inset(0 100% 0 0); transform: scale(1.025); }
+	to { clip-path: inset(0 0 0 0); transform: scale(1); }
+}
+.ms_ani_imageMaskRevealRight {
+	-webkit-animation-name: ms_imageMaskRevealRight;
+	animation-name: ms_imageMaskRevealRight;
+	-webkit-transform-origin: 0 50%;
+	transform-origin: 0 50%;
+}
+
+/* Optional: make "Short" variants feel snappier by default.
+   Elementor still controls duration via Animation Duration, but when it's empty
+   these values help keep things consistent. */
+.animated.ms_ani_fadeInShort,
+.animated.ms_ani_fadeInUpShort,
+.animated.ms_ani_fadeInDownShort,
+.animated.ms_ani_fadeInLeftShort,
+.animated.ms_ani_fadeInRightShort,
+.animated.ms_ani_imageTiltReveal,
+.animated.ms_ani_imageMaskRevealDown,
+.animated.ms_ani_imageMaskRevealUp,
+.animated.ms_ani_imageMaskRevealRight,
+.animated.ms_ani_slideInDownSmooth,
+.animated.ms_ani_slideOutUpSmooth {
+	--ms-motion-duration: 700ms;
+	-webkit-animation-duration: var(--ms-motion-duration);
+	animation-duration: var(--ms-motion-duration);
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+
+.animated.ms_ani_imageMaskRevealDown,
+.animated.ms_ani_imageMaskRevealUp,
+.animated.ms_ani_imageMaskRevealRight { --ms-motion-duration: 1s; }
+.animated.animated-fast.ms_ani_imageMaskRevealDown,
+.animated.animated-fast.ms_ani_imageMaskRevealUp,
+.animated.animated-fast.ms_ani_imageMaskRevealRight { --ms-motion-duration: 500ms; }
+.animated.animated-slow.ms_ani_imageMaskRevealDown,
+.animated.animated-slow.ms_ani_imageMaskRevealUp,
+.animated.animated-slow.ms_ani_imageMaskRevealRight { --ms-motion-duration: 1.5s; }
+
+.animated-fast .animated.ms_ani_fadeInShort,
+.animated-fast .animated.ms_ani_fadeInUpShort,
+.animated-fast .animated.ms_ani_fadeInDownShort,
+.animated-fast .animated.ms_ani_fadeInLeftShort,
+.animated-fast .animated.ms_ani_fadeInRightShort,
+.animated-fast .animated.ms_ani_imageTiltReveal,
+.animated-fast .animated.ms_ani_imageMaskRevealDown,
+.animated-fast .animated.ms_ani_imageMaskRevealUp,
+.animated-fast .animated.ms_ani_imageMaskRevealRight,
+.animated-fast .animated.ms_ani_slideInDownSmooth,
+.animated-fast .animated.ms_ani_slideOutUpSmooth {
+	--ms-motion-duration: 350ms;
+}
+
+.animated-slow .animated.ms_ani_fadeInShort,
+.animated-slow .animated.ms_ani_fadeInUpShort,
+.animated-slow .animated.ms_ani_fadeInDownShort,
+.animated-slow .animated.ms_ani_fadeInLeftShort,
+.animated-slow .animated.ms_ani_fadeInRightShort,
+.animated-slow .animated.ms_ani_imageTiltReveal,
+.animated-slow .animated.ms_ani_imageMaskRevealDown,
+.animated-slow .animated.ms_ani_imageMaskRevealUp,
+.animated-slow .animated.ms_ani_imageMaskRevealRight,
+.animated-slow .animated.ms_ani_slideInDownSmooth,
+.animated-slow .animated.ms_ani_slideOutUpSmooth {
+	--ms-motion-duration: 1.2s;
+}
+
+.animated.animated-fast.ms_ani_imageTiltReveal { --ms-motion-duration: 350ms; }
+.animated.animated-slow.ms_ani_imageTiltReveal { --ms-motion-duration: 1.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+	.animated.ms_ani_imageTiltReveal,
+	.animated.ms_ani_imageMaskRevealDown,
+	.animated.ms_ani_imageMaskRevealUp,
+	.animated.ms_ani_imageMaskRevealRight {
+		--ms-motion-duration: 1ms !important;
+	}
+}
+
+/* ------------------------------------------------------------------
+ * Text split helpers
+ *
+ * IMPORTANT: for char-by-char / word-by-word transforms to be visible,
+ * each piece must be an inline-block (inline elements don't reliably
+ * show per-character transforms across browsers).
+ * ------------------------------------------------------------------ */
+.ms-animated-text-block,
+.ms-animated-item.ms-animated-text-block {
+	display: inline-block;
+	will-change: transform, opacity;
+}
+
+/* Keep words together, but still allow wrapping between words */
+.ms-animated-word {
+	display: inline-block;
+	white-space: nowrap;
+}
