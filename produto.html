@@ -17,12 +17,12 @@ main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
 .detail img.main{width:100%;max-height:460px;object-fit:contain;background:#fafafa;border:1px solid #eee;border-radius:16px;display:block}
 h1{font-family:"Playfair Display",Georgia,serif;font-size:32px;margin:6px 0 10px;line-height:1.2}
 .badge{display:inline-block;font-size:13px;font-weight:600;color:#41591F;border:1px solid #41591F;padding:4px 12px;border-radius:999px;margin-bottom:10px}
-.price{display:inline-block;font-size:17px;font-weight:700;color:#fff;background:#41591F;padding:4px 14px;border-radius:999px;margin:10px 0}
+.price{display:inline-block;font-size:17px;font-weight:700;color:#fff;background:linear-gradient(135deg,#2e5a1e,#0a0f0a);padding:4px 14px;border-radius:999px;margin:10px 0}
 .serves{font-size:16px;color:#444;line-height:1.5}.benefit{font-size:14px;color:#666;line-height:1.5}
-.stock{font-size:14px;color:#b3261e;font-weight:600;margin:10px 0}
+.stock{font-size:14px;color:#555;font-weight:600;margin:10px 0}.oldprice{text-decoration:line-through;color:#888;font-weight:600;margin-right:8px}.badge-soldout{display:inline-block;background:#111;color:#fff;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;margin:10px 0}
 .qty{display:flex;gap:8px;align-items:center;margin:14px 0}.qty button{padding:8px 14px;border:1px solid #ccc;background:#fff;border-radius:10px;cursor:pointer;font-size:16px}
 .qty span{font-size:18px;font-weight:700;min-width:28px;text-align:center}
-.btn-green{background:#41591F;color:#fff;border:0;padding:14px 22px;border-radius:999px;cursor:pointer;font-size:15px;font-weight:600;width:100%}
+.btn-green{background:linear-gradient(135deg,#2e5a1e,#0a0f0a);color:#fff;border:0;padding:14px 22px;border-radius:999px;cursor:pointer;font-size:15px;font-weight:600;width:100%}
 @media(min-width:768px){.btn-green{width:auto}}
 .done{display:none;border:1px solid #cfe8b8;border-radius:12px;padding:14px;margin-top:14px;text-align:center}
 .delivery{border:1px solid #eee;border-radius:16px;padding:16px;margin-top:22px;line-height:1.6}
@@ -83,13 +83,18 @@ function closeMenu(){const n=document.getElementById("mainNav");if(n)n.classList
 document.getElementById("mainNav").addEventListener("click",function(e){if(e.target.closest("a"))closeMenu();});
 document.addEventListener("click",function(e){const n=document.getElementById("mainNav");if(n&&n.classList.contains("open")&&!e.target.closest("header"))closeMenu();});
 function priceNum(p){return parseFloat(String(p.price).replace(/[^\d.]/g,""))||0;}
+function isSoldout(p){return p.soldout===true||p.stock<=0;}
+function hasPromo(p){const pr=parseFloat(p.promo)||0;return pr>0&&pr<priceNum(p);}
+function fmtNum(v){const n=parseFloat(v)||0;return n.toLocaleString("pt-PT").replace(/,/g,".")+" MT";}
+function priceHtml(p){if(hasPromo(p))return '<span class="oldprice">'+esc(p.price)+'</span><span class="price">'+esc(fmtNum(p.promo))+'</span>';return '<span class="price">'+esc(p.price)+'</span>';}
+function stockHtml(p){if(isSoldout(p))return '<span class="badge-soldout">Esgotado</span>';return '<div class="stock" style="color:#555">Stock: '+p.stock+'</div>';}
 const params=new URLSearchParams(location.search);
 const pid=Number(params.get("p"));
 const p=products.find(x=>x.id===pid);
 const el=document.getElementById("content");
 if(!p){
   document.title="Produto não encontrado — LIFE VITAMINS";
-  el.innerHTML='<div class="notfound"><h1>Produto não encontrado</h1><p style="color:#666">Este produto não existe ou já não está disponível.</p><a href="loja.html" style="display:inline-block;margin-top:16px;padding:12px 22px;background:#41591F;color:#fff;border-radius:999px;text-decoration:none">Voltar à loja</a></div>';
+  el.innerHTML='<div class="notfound"><h1>Produto não encontrado</h1><p style="color:#666">Este produto não existe ou já não está disponível.</p><a href="loja.html" style="display:inline-block;margin-top:16px;padding:12px 22px;background:linear-gradient(135deg,#2e5a1e,#0a0f0a);color:#fff;border-radius:999px;text-decoration:none">Voltar à loja</a></div>';
 }else{
   document.title=p.name+" — LIFE VITAMINS";
   let qty=1;
@@ -97,29 +102,29 @@ if(!p){
   el.innerHTML='<div class="detail"><img class="main" src="'+esc(p.img)+'" alt="'+esc(p.name)+'"><div>'
     +'<span class="badge">'+(CAT_LABEL[p.cat]||p.cat)+'</span>'
     +'<h1>'+esc(p.name)+'</h1>'
-    +'<span class="price">'+esc(p.price)+'</span>'
+    +priceHtml(p)
     +'<p class="serves">'+esc(p.serves)+'</p>'
     +'<p class="benefit">'+esc(p.details)+' '+(CAT_BENEFIT[p.cat]||"")+'</p>'
-    +'<div class="stock">'+(p.stock<=3?("Só restam "+p.stock+"!"):("Stock: "+p.stock))+'</div>'
+    +stockHtml(p)
     +'<div class="qty"><button id="qminus" aria-label="Menos">−</button><span id="qval">1</span><button id="qplus" aria-label="Mais">+</button></div>'
-    +(getUser()?'<button class="btn-green" id="addBtn">Adicionar ao carrinho</button>':'<a class="btn-green" href="loja.html#entrar" style="display:inline-block;text-decoration:none;padding:12px 22px">Entrar para comprar</a>')
+    +(isSoldout(p)?'<button class="btn-green" disabled style="opacity:.5">Esgotado</button>':(getUser()?'<button class="btn-green" id="addBtn">Adicionar ao carrinho</button>':'<a class="btn-green" href="loja.html#entrar" style="display:inline-block;text-decoration:none;padding:12px 22px">Entrar para comprar</a>'))
     +'<div class="done" id="addedMsg">Adicionado ao carrinho. <a href="loja.html#carrinho">Ver carrinho</a> · <a href="loja.html">Continuar a comprar</a></div>'
     +'<div class="delivery"><h3>Entrega</h3>'
     +'<p><strong>Maputo — 150 MT</strong> · entrega após o pagamento, em horário de expediente.</p>'
     +'<p><strong>Matola — 200 MT</strong> · entrega após o pagamento, em horário de expediente.</p>'
     +'<p><strong>Províncias — 350 MT</strong> · pelo portador diário, 2 a 5 dias úteis após o pagamento.</p>'
-    +'<button class="btn" onclick="toggleHours()">Ver horários</button>'
+    +'<button class="btn-green" onclick="toggleHours()">Ver horários</button>'
     +'<div id="hoursPanel" style="display:none;margin-top:10px;text-align:left;line-height:1.6"><div id="hoursContent" style="white-space:pre-line"></div><p style="color:#666">As entregas são feitas após o pagamento, em horário de expediente.</p></div></div>'
     +'</div></div>'
     +'<h2 class="seg">Produtos do mesmo segmento: '+(CAT_LABEL[p.cat]||p.cat)+'</h2>'
-    +'<div class="grid">'+same.map(q=>'<div class="card"><img src="'+esc(q.img)+'" alt="'+esc(q.name)+'" loading="lazy"><h3>'+esc(q.name)+'</h3><span class="price">'+esc(q.price)+'</span><br><a class="det" href="produto.html?p='+q.id+'">Ver detalhes</a></div>').join("")+'</div>';
+    +'<div class="grid">'+same.map(q=>'<div class="card"><img src="'+esc(q.img)+'" alt="'+esc(q.name)+'" loading="lazy"><h3>'+esc(q.name)+'</h3>'+priceHtml(q)+'<br>'+stockHtml(q)+'<br><a class="det" href="produto.html?p='+q.id+'">Ver detalhes</a></div>').join("")+'</div>';
   document.getElementById("qminus").onclick=()=>{if(qty>1){qty--;document.getElementById("qval").textContent=qty;}};
-  document.getElementById("qplus").onclick=()=>{if(qty<p.stock){qty++;document.getElementById("qval").textContent=qty;}};
+  document.getElementById("qplus").onclick=()=>{if(isSoldout(p))return;if(qty<p.stock){qty++;document.getElementById("qval").textContent=qty;}};
   const addBtnEl=document.getElementById("addBtn");
-  if(addBtnEl)addBtnEl.onclick=()=>{if(!getUser()){location.href="loja.html#entrar";return;}
+  if(addBtnEl)addBtnEl.onclick=()=>{if(isSoldout(p)){alert("Este produto está esgotado.");return;}if(!getUser()){location.href="loja.html#entrar";return;}
     const cart=getCart();
     const cur=cart[p.id]||0;
-    if(cur>=p.stock){alert("Só restam "+p.stock+" unidades deste produto.");return;}
+    if(cur>=p.stock){alert("Stock: "+p.stock+" unidades.");return;}
     cart[p.id]=Math.min(p.stock,cur+qty);
     saveCart(cart);
     document.getElementById("addedMsg").style.display="block";

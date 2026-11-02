@@ -21,6 +21,7 @@ h1{text-align:center;font-family:"Playfair Display",Georgia,serif;font-size:34px
 .card h3{font-size:16px;margin:12px 10px 4px}
 .serves{font-size:13px;color:#666;margin:0 10px 8px;min-height:36px}
 .price{display:inline-block;font-size:17px;font-weight:700;color:#fff;background:#41591F;padding:4px 14px;border-radius:999px;margin:6px 0}
+.stock{font-size:13px;color:#555;margin:6px 0 0}
 .details{display:inline-block;margin-top:8px;padding:8px 18px;border:1px solid #222;border-radius:999px;background:#fff;cursor:pointer;font-size:14px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
 .modal.open{display:flex}.box{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:20px;text-align:center;max-height:90vh;overflow:auto}
@@ -51,39 +52,39 @@ h1{text-align:center;font-family:"Playfair Display",Georgia,serif;font-size:34px
 <div class="foot">LIFE VITAMINS • Suplementos</div>
 <script>
 const products=[
-{name:"AG1",img:"images/sup-ag1.jpg",cat:"geral",price:"3.850 MT",serves:"Multivitamínico diário completo",details:"Suplemento verde diário, para uma rotina completa de vitaminas e minerais."},
-{name:"Magnésio SUKU",img:"images/sup-magnesio.jpg",cat:"sono",price:"1.850 MT",serves:"Relaxamento, músculos e sono",details:"Magnésio para relaxar os músculos, acalmar e ajudar a dormir melhor."},
-{name:"NAD+ Cata-Kor",img:"images/sup-nad.jpg",cat:"energia",price:"3.450 MT",serves:"Energia e longevidade",details:"NAD+ para energia celular e apoio à longevidade."},
-{name:"Focus+ Emrald Labs",img:"images/sup-focus.jpg",cat:"foco",price:"2.450 MT",serves:"Foco e concentração",details:"Fórmula para foco e concentração no dia a dia."},
-{name:"Meno Brain Health",img:"images/sup-meno.jpg",cat:"foco",price:"2.650 MT",serves:"Memória e saúde cerebral",details:"Apoio à memória e à saúde do cérebro."},
-{name:"Goli Probiotics",img:"images/sup-goli.jpg",cat:"digestao",price:"2.350 MT",serves:"Probióticos e digestão",details:"Probióticos em gomas para a digestão e o equilíbrio intestinal."},
-{name:"Lune Melatonina",img:"images/sup-lune.jpg",cat:"sono",price:"1.950 MT",serves:"Sono tranquilo",details:"Melatonina para adormecer melhor e ter noites mais calmas."},
-{name:"Golly Colagénio",img:"images/sup-golly.jpg",cat:"pele",price:"2.450 MT",serves:"Colagénio e pele",details:"Colagénio para a pele, cabelo e unhas."},
-{name:"Feel Hair Support",img:"images/sup-feel-hair.jpg",cat:"capilar",price:"2.350 MT",serves:"Cabelo forte e saudável",details:"Apoio ao cabelo, para um cabelo mais forte e saudável."},
-{name:"Mitopure Timeline",img:"images/sup-mitopure.jpg",cat:"energia",price:"3.650 MT",serves:"Energia celular",details:"Mitopure para a energia das células e a recuperação."},
-{name:"BPC-157 Peak Human",img:"images/sup-bpc.jpg",cat:"energia",price:"2.950 MT",serves:"Recuperação e treino",details:"Para a recuperação depois do treino e o apoio muscular."},
-{name:"Chill Pill",img:"images/sup-chill-pill.jpg",cat:"sono",price:"2.150 MT",serves:"Calma e relaxamento",details:"Para acalmar, relaxar e aliviar o stress do dia."},
-{name:"Ancient Omegas",img:"images/sup-omega.jpg",cat:"geral",price:"2.650 MT",serves:"Ómega para coração e cérebro",details:"Ómegas essenciais para o coração, o cérebro e o bem-estar geral."},
-{name:"Purna Mama Bear",img:"images/sup-purna.jpg",cat:"geral",price:"2.350 MT",serves:"Para mamãs",details:"Suplemento pensado para mamãs, para o dia a dia."},
-{name:"Glutationa",img:"images/sup-glutathione-deitar.jpg",cat:"pele",price:"2.850 MT",serves:"Antioxidante e pele luminosa",details:"Glutationa, antioxidante para uma pele mais luminosa."},
-{name:"Vida Glow Hairology",img:"images/sup-vidaglow-hair.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo e brilho",details:"Vida Glow para o cabelo, brilho e cuidado capilar."},
-{name:"Nutriplus by Farmasi",img:"images/sup-nutriplus.jpg",cat:"geral",price:"2.850 MT",serves:"Suplemento diário completo",details:"Nutriplus, suplemento diário completo para o bem-estar."},
-{name:"Whey Protein Isolate",img:"images/sup-whey.jpg",cat:"energia",price:"",serves:"Proteína para treino e músculo",details:"Proteína isolada para o treino, a recuperação e o músculo."},
-{name:"Seed DS-01 Simbiótico",img:"images/sup-seed.jpg",cat:"digestao",price:"",serves:"Simbiótico diário",details:"Simbiótico diário com prebióticos e probióticos para a digestão."},
-{name:"TrueBrain Nootropic",img:"images/sup-truebrain.jpg",cat:"foco",price:"",serves:"Foco e memória",details:"Nootrópico para foco, clareza e memória."},
-{name:"NOON Focus + Chill",img:"images/sup-noon.jpg",cat:"foco",price:"",serves:"Foco e calma",details:"Gomas para foco e calma, sem agitação."},
-{name:"THE NUE CO Pre + Probiotic",img:"images/sup-nueco1.jpg",cat:"digestao",price:"",serves:"Prebióticos e probióticos",details:"Prebióticos e probióticos para a saúde intestinal."},
-{name:"ODYN",img:"images/sup-odyn.jpg",cat:"geral",price:"",serves:"Suplemento diário",details:"Suplemento diário para o bem-estar geral."},
-{name:"Proper Immune Support",img:"images/sup-proper.jpg",cat:"imunidade",price:"",serves:"Apoio imunitário",details:"Pó superalimento com vitamina C, sabugueiro e papaia, para o apoio imunitário."},
-{name:"SinoPlaSan Meno Wunder + Venen Balance",img:"images/sup-sinoplasam.jpg",cat:"geral",price:"",serves:"Equilíbrio e circulação",details:"Meno Wunder e Venen Balance, com folhas de videira vermelha e castanha-da-índia, 120 cápsulas."},
-{name:"VIDA GLOW",img:"images/sup-vidaglow-verde.jpg",cat:"capilar",price:"",serves:"Cabelo e brilho",details:"VIDA GLOW em frasco verde, cápsulas para o cabelo e o brilho."},
-{name:"ELLAVita D3",img:"images/sup-ellavita-d3.jpg",cat:"ossos",price:"",serves:"Vitamina D3 + óleo de coco",details:"Vitamina D3 5000IU com óleo de coco, 60 softgels, suplemento alimentar."},
-{name:"energybits Espirulina",img:"images/sup-energybits-tubo.jpg",cat:"energia",price:"",serves:"Foco, fitness e energia",details:"Comprimidos de espirulina para foco, fitness e energia, 360 comprimidos."},
-{name:"VIBE OXIGLOW",img:"images/sup-vibe-oxiglow.jpg",cat:"pele",price:"",serves:"Saquetas verdes",details:"Saquetas VIBE OXIGLOW, suplemento em saqueta individual."},
-{name:"MAXX",img:"images/sup-maxx.jpg",cat:"energia",price:"",serves:"Pré-treino, creatina e BCAA",details:"MAXX: pré-treino, creatina pura e BCAA, para treino e recuperação."},
-{name:"AEMIS SPIRO PLUS",img:"images/sup-aemis-spiro.jpg",cat:"digestao",price:"",serves:"Enzimas digestivas e espirulina",details:"Pastilhas mastigáveis com enzimas digestivas, espirulina azul e espirulina verde."},
-{name:"HAIROLOGY VIDA GLOW",img:"images/sup-hairology-vidaglow.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo, reparação avançada",details:"HAIROLOGY Advanced Repair, cápsulas para o cabelo, 30 cápsulas."},
-{name:"Vitaminicum Ferro Max",img:"images/sup-vitaminicum-ferro.jpg",cat:"imunidade",price:"",serves:"Ferro e vitaminas extra",details:"Ferro com LIPOFER, fonte de ferro e vitaminas extra, para cansaço e fadiga, imunidade e hemoglobina, 30 comprimidos."},
+{name:"AG1",img:"images/sup-ag1.jpg",cat:"geral",price:"3.850 MT",serves:"Multivitamínico diário completo",details:"Suplemento verde diário, para uma rotina completa de vitaminas e minerais.",stock:1},
+{name:"Magnésio SUKU",img:"images/sup-magnesio.jpg",cat:"sono",price:"1.850 MT",serves:"Relaxamento, músculos e sono",details:"Magnésio para relaxar os músculos, acalmar e ajudar a dormir melhor.",stock:2},
+{name:"NAD+ Cata-Kor",img:"images/sup-nad.jpg",cat:"energia",price:"3.450 MT",serves:"Energia e longevidade",details:"NAD+ para energia celular e apoio à longevidade.",stock:3},
+{name:"Focus+ Emrald Labs",img:"images/sup-focus.jpg",cat:"foco",price:"2.450 MT",serves:"Foco e concentração",details:"Fórmula para foco e concentração no dia a dia.",stock:1},
+{name:"Meno Brain Health",img:"images/sup-meno.jpg",cat:"foco",price:"2.650 MT",serves:"Memória e saúde cerebral",details:"Apoio à memória e à saúde do cérebro.",stock:2},
+{name:"Goli Probiotics",img:"images/sup-goli.jpg",cat:"digestao",price:"2.350 MT",serves:"Probióticos e digestão",details:"Probióticos em gomas para a digestão e o equilíbrio intestinal.",stock:3},
+{name:"Lune Melatonina",img:"images/sup-lune.jpg",cat:"sono",price:"1.950 MT",serves:"Sono tranquilo",details:"Melatonina para adormecer melhor e ter noites mais calmas.",stock:1},
+{name:"Golly Colagénio",img:"images/sup-golly.jpg",cat:"pele",price:"2.450 MT",serves:"Colagénio e pele",details:"Colagénio para a pele, cabelo e unhas.",stock:2},
+{name:"Feel Hair Support",img:"images/sup-feel-hair.jpg",cat:"capilar",price:"2.350 MT",serves:"Cabelo forte e saudável",details:"Apoio ao cabelo, para um cabelo mais forte e saudável.",stock:3},
+{name:"Mitopure Timeline",img:"images/sup-mitopure.jpg",cat:"energia",price:"3.650 MT",serves:"Energia celular",details:"Mitopure para a energia das células e a recuperação.",stock:1},
+{name:"BPC-157 Peak Human",img:"images/sup-bpc.jpg",cat:"energia",price:"2.950 MT",serves:"Recuperação e treino",details:"Para a recuperação depois do treino e o apoio muscular.",stock:2},
+{name:"Chill Pill",img:"images/sup-chill-pill.jpg",cat:"sono",price:"2.150 MT",serves:"Calma e relaxamento",details:"Para acalmar, relaxar e aliviar o stress do dia.",stock:3},
+{name:"Ancient Omegas",img:"images/sup-omega.jpg",cat:"geral",price:"2.650 MT",serves:"Ómega para coração e cérebro",details:"Ómegas essenciais para o coração, o cérebro e o bem-estar geral.",stock:1},
+{name:"Purna Mama Bear",img:"images/sup-purna.jpg",cat:"geral",price:"2.350 MT",serves:"Para mamãs",details:"Suplemento pensado para mamãs, para o dia a dia.",stock:2},
+{name:"Glutationa",img:"images/sup-glutathione-deitar.jpg",cat:"pele",price:"2.850 MT",serves:"Antioxidante e pele luminosa",details:"Glutationa, antioxidante para uma pele mais luminosa.",stock:3},
+{name:"Vida Glow Hairology",img:"images/sup-vidaglow-hair.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo e brilho",details:"Vida Glow para o cabelo, brilho e cuidado capilar.",stock:1},
+{name:"Nutriplus by Farmasi",img:"images/sup-nutriplus.jpg",cat:"geral",price:"2.850 MT",serves:"Suplemento diário completo",details:"Nutriplus, suplemento diário completo para o bem-estar.",stock:2},
+{name:"Whey Protein Isolate",img:"images/sup-whey.jpg",cat:"energia",price:"",serves:"Proteína para treino e músculo",details:"Proteína isolada para o treino, a recuperação e o músculo.",stock:3},
+{name:"Seed DS-01 Simbiótico",img:"images/sup-seed.jpg",cat:"digestao",price:"",serves:"Simbiótico diário",details:"Simbiótico diário com prebióticos e probióticos para a digestão.",stock:1},
+{name:"TrueBrain Nootropic",img:"images/sup-truebrain.jpg",cat:"foco",price:"",serves:"Foco e memória",details:"Nootrópico para foco, clareza e memória.",stock:2},
+{name:"NOON Focus + Chill",img:"images/sup-noon.jpg",cat:"foco",price:"",serves:"Foco e calma",details:"Gomas para foco e calma, sem agitação.",stock:3},
+{name:"THE NUE CO Pre + Probiotic",img:"images/sup-nueco1.jpg",cat:"digestao",price:"",serves:"Prebióticos e probióticos",details:"Prebióticos e probióticos para a saúde intestinal.",stock:1},
+{name:"ODYN",img:"images/sup-odyn.jpg",cat:"geral",price:"",serves:"Suplemento diário",details:"Suplemento diário para o bem-estar geral.",stock:2},
+{name:"Proper Immune Support",img:"images/sup-proper.jpg",cat:"imunidade",price:"",serves:"Apoio imunitário",details:"Pó superalimento com vitamina C, sabugueiro e papaia, para o apoio imunitário.",stock:3},
+{name:"SinoPlaSan Meno Wunder + Venen Balance",img:"images/sup-sinoplasam.jpg",cat:"geral",price:"",serves:"Equilíbrio e circulação",details:"Meno Wunder e Venen Balance, com folhas de videira vermelha e castanha-da-índia, 120 cápsulas.",stock:1},
+{name:"VIDA GLOW",img:"images/sup-vidaglow-verde.jpg",cat:"capilar",price:"",serves:"Cabelo e brilho",details:"VIDA GLOW em frasco verde, cápsulas para o cabelo e o brilho.",stock:2},
+{name:"ELLAVita D3",img:"images/sup-ellavita-d3.jpg",cat:"ossos",price:"",serves:"Vitamina D3 + óleo de coco",details:"Vitamina D3 5000IU com óleo de coco, 60 softgels, suplemento alimentar.",stock:3},
+{name:"energybits Espirulina",img:"images/sup-energybits-tubo.jpg",cat:"energia",price:"",serves:"Foco, fitness e energia",details:"Comprimidos de espirulina para foco, fitness e energia, 360 comprimidos.",stock:1},
+{name:"VIBE OXIGLOW",img:"images/sup-vibe-oxiglow.jpg",cat:"pele",price:"",serves:"Saquetas verdes",details:"Saquetas VIBE OXIGLOW, suplemento em saqueta individual.",stock:2},
+{name:"MAXX",img:"images/sup-maxx.jpg",cat:"energia",price:"",serves:"Pré-treino, creatina e BCAA",details:"MAXX: pré-treino, creatina pura e BCAA, para treino e recuperação.",stock:3},
+{name:"AEMIS SPIRO PLUS",img:"images/sup-aemis-spiro.jpg",cat:"digestao",price:"",serves:"Enzimas digestivas e espirulina",details:"Pastilhas mastigáveis com enzimas digestivas, espirulina azul e espirulina verde.",stock:1},
+{name:"HAIROLOGY VIDA GLOW",img:"images/sup-hairology-vidaglow.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo, reparação avançada",details:"HAIROLOGY Advanced Repair, cápsulas para o cabelo, 30 cápsulas.",stock:2},
+{name:"Vitaminicum Ferro Max",img:"images/sup-vitaminicum-ferro.jpg",cat:"imunidade",price:"",serves:"Ferro e vitaminas extra",details:"Ferro com LIPOFER, fonte de ferro e vitaminas extra, para cansaço e fadiga, imunidade e hemoglobina, 30 comprimidos.",stock:3},
 ];
 const ID_BY_NAME={"AG1": 1, "Magnésio SUKU": 2, "NAD+ Cata-Kor": 3, "Focus+ Emrald Labs": 4, "Meno Brain Health": 5, "Goli Probiotics": 6, "Lune Melatonina": 7, "Golly Colagénio": 8, "Feel Hair Support": 9, "Mitopure Timeline": 10, "BPC-157 Peak Human": 11, "Chill Pill": 12, "Ancient Omegas": 13, "Purna Mama Bear": 14, "Glutationa": 15, "Vida Glow Hairology": 16, "Nutriplus by Farmasi": 17, "Whey Protein Isolate": 18, "Seed DS-01 Simbiótico": 19, "TrueBrain Nootropic": 20, "NOON Focus + Chill": 21, "THE NUE CO Pre + Probiotic": 22, "ODYN": 23, "Proper Immune Support": 24, "SinoPlaSan Meno Wunder + Venen Balance": 25, "VIDA GLOW": 26, "ELLAVita D3": 27, "energybits Espirulina": 28, "VIBE OXIGLOW": 29, "MAXX": 30, "AEMIS SPIRO PLUS": 31, "HAIROLOGY VIDA GLOW": 32, "Vitaminicum Ferro Max": 33, "Vitamina C 1000mg": 34, "Vitamina D3 5000IU": 35, "Cálcio + Vitamina D": 36, "Ferro + Ácido Fólico": 37, "Zinco 50mg": 38, "Ómega 3 Peixe": 39, "Probiótico 50 Mil Milhões": 40, "Colagénio Hidrolisado": 41, "Proteína Whey Chocolate": 42, "Creatina Monohidratada": 43, "BCAA 2:1:1": 44, "Magnésio Glicinato": 45, "Melatonina 5mg": 46, "Biotina Cabelo": 47, "Vitamina E Pele": 48, "Multivitamínico Mulher": 49, "Multivitamínico Homem": 50, "Glucosamina Articulações": 51, "Curcumina + Pimenta Preta": 52, "Luteína Visão": 53, "Ashwagandha KSM-66": 54, "Ginkgo Biloba Memória": 55, "Espirulina Orgânica": 56, "Clorela Detox": 57, "Vitamina B Complexo": 58, "Ácido Hialurónico Pele": 59};
 const grid=document.getElementById('grid');
@@ -91,7 +92,7 @@ function render(f){
   grid.innerHTML='';
   products.filter(p=>f==='todos'||p.cat===f).forEach((p,i)=>{
     const d=document.createElement('div');d.className='card';
-    d.innerHTML='<img src="'+p.img+'" alt="'+p.name+'"><h3>'+p.name+'</h3><p class="serves">'+p.serves+'</p>'+(p.price?'<span class="price">'+p.price+'</span><br>':'')+'<a class="details" style="text-decoration:none;color:#222" href="produto.html?p='+ID_BY_NAME[p.name]+'">Ver detalhes</a>';
+    d.innerHTML='<img src="'+p.img+'" alt="'+p.name+'"><h3>'+p.name+'</h3><p class="serves">'+p.serves+'</p>'+(p.price?'<span class="price">'+p.price+'</span><br>':'')+'<p class="stock">Stock: '+p.stock+'</p>'+'<a class="details" style="text-decoration:none;color:#222" href="produto.html?p='+ID_BY_NAME[p.name]+'">Ver detalhes</a>';
     grid.appendChild(d);
   });
 }
