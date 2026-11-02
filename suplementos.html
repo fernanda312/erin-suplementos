@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suplementos — LIFE VITAMINS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:#222;background:#fff}
+.top{display:flex;align-items:center;justify-content:center;gap:12px;padding:22px 16px 6px}
+.top img{height:48px;width:auto}.top span{font-family:"Playfair Display",Georgia,serif;font-size:28px;letter-spacing:3px;color:#1f3d1f}
+h1{text-align:center;font-family:"Playfair Display",Georgia,serif;font-size:34px;margin:10px 0 4px}
+.sub{text-align:center;color:#666;margin:0 0 20px;padding:0 16px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 16px 20px}
+.filters button{border:1px solid #ccc;background:#fff;padding:8px 16px;border-radius:999px;cursor:pointer;font-size:14px}
+.filters button.active{background:#41591F;color:#fff;border-color:#41591F}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:0 16px 40px;max-width:1100px;margin:0 auto}
+@media(min-width:768px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{border:1px solid #eee;border-radius:16px;overflow:hidden;text-align:center;padding-bottom:14px;background:#fff}
+.card img{width:100%;height:220px;object-fit:contain;background:#fafafa;display:block}
+.card h3{font-size:16px;margin:12px 10px 4px}
+.serves{font-size:13px;color:#666;margin:0 10px 8px;min-height:36px}
+.price{display:inline-block;font-size:17px;font-weight:700;color:#fff;background:#41591F;padding:4px 14px;border-radius:999px;margin:6px 0}
+.details{display:inline-block;margin-top:8px;padding:8px 18px;border:1px solid #222;border-radius:999px;background:#fff;cursor:pointer;font-size:14px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex}.box{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:20px;text-align:center;max-height:90vh;overflow:auto}
+.box img{width:100%;max-height:320px;object-fit:contain;background:#fafafa;border-radius:12px}
+.box h2{margin:14px 0 6px}.box p{color:#444;line-height:1.5}
+.close{float:right;border:0;background:none;font-size:24px;cursor:pointer}
+.foot{text-align:center;padding:30px 20px;color:#666;border-top:1px solid #eee}
+@media(max-width:767px){.card img{height:170px}.top span{font-size:22px}.top img{height:38px}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="top"><img src="images/life-sphere-logo.png" alt=""><span>LIFE VITAMINS</span></div>
+<h1>Suplementos</h1>
+<p class="sub">Escolhe por categoria e vê os detalhes de cada suplemento.</p>
+<div class="filters" id="filters">
+<button class="active" data-f="todos">Todos</button>
+<button data-f="capilar">Capilar</button>
+<button data-f="energia">Energia</button>
+<button data-f="foco">Foco</button>
+<button data-f="sono">Sono</button>
+<button data-f="digestao">Digestão</button>
+<button data-f="imunidade">Imunidade</button>
+<button data-f="pele">Pele</button>
+<button data-f="ossos">Ossos</button>
+<button data-f="geral">Geral</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeModal()">×</button><img id="mimg" src="" alt=""><h2 id="mname"></h2><div id="mprice"></div><p id="mserves"></p><p id="mdetails"></p></div></div>
+<div class="foot">LIFE VITAMINS • Suplementos</div>
+<script>
+const products=[
+{name:"AG1",img:"images/sup-ag1.jpg",cat:"geral",price:"3.850 MT",serves:"Multivitamínico diário completo",details:"Suplemento verde diário, para uma rotina completa de vitaminas e minerais."},
+{name:"Magnésio SUKU",img:"images/sup-magnesio.jpg",cat:"sono",price:"1.850 MT",serves:"Relaxamento, músculos e sono",details:"Magnésio para relaxar os músculos, acalmar e ajudar a dormir melhor."},
+{name:"NAD+ Cata-Kor",img:"images/sup-nad.jpg",cat:"energia",price:"3.450 MT",serves:"Energia e longevidade",details:"NAD+ para energia celular e apoio à longevidade."},
+{name:"Focus+ Emrald Labs",img:"images/sup-focus.jpg",cat:"foco",price:"2.450 MT",serves:"Foco e concentração",details:"Fórmula para foco e concentração no dia a dia."},
+{name:"Meno Brain Health",img:"images/sup-meno.jpg",cat:"foco",price:"2.650 MT",serves:"Memória e saúde cerebral",details:"Apoio à memória e à saúde do cérebro."},
+{name:"Goli Probiotics",img:"images/sup-goli.jpg",cat:"digestao",price:"2.350 MT",serves:"Probióticos e digestão",details:"Probióticos em gomas para a digestão e o equilíbrio intestinal."},
+{name:"Lune Melatonina",img:"images/sup-lune.jpg",cat:"sono",price:"1.950 MT",serves:"Sono tranquilo",details:"Melatonina para adormecer melhor e ter noites mais calmas."},
+{name:"Golly Colagénio",img:"images/sup-golly.jpg",cat:"pele",price:"2.450 MT",serves:"Colagénio e pele",details:"Colagénio para a pele, cabelo e unhas."},
+{name:"Feel Hair Support",img:"images/sup-feel-hair.jpg",cat:"capilar",price:"2.350 MT",serves:"Cabelo forte e saudável",details:"Apoio ao cabelo, para um cabelo mais forte e saudável."},
+{name:"Mitopure Timeline",img:"images/sup-mitopure.jpg",cat:"energia",price:"3.650 MT",serves:"Energia celular",details:"Mitopure para a energia das células e a recuperação."},
+{name:"BPC-157 Peak Human",img:"images/sup-bpc.jpg",cat:"energia",price:"2.950 MT",serves:"Recuperação e treino",details:"Para a recuperação depois do treino e o apoio muscular."},
+{name:"Chill Pill",img:"images/sup-chill-pill.jpg",cat:"sono",price:"2.150 MT",serves:"Calma e relaxamento",details:"Para acalmar, relaxar e aliviar o stress do dia."},
+{name:"Ancient Omegas",img:"images/sup-omega.jpg",cat:"geral",price:"2.650 MT",serves:"Ómega para coração e cérebro",details:"Ómegas essenciais para o coração, o cérebro e o bem-estar geral."},
+{name:"Purna Mama Bear",img:"images/sup-purna.jpg",cat:"geral",price:"2.350 MT",serves:"Para mamãs",details:"Suplemento pensado para mamãs, para o dia a dia."},
+{name:"Glutationa",img:"images/sup-glutathione-deitar.jpg",cat:"pele",price:"2.850 MT",serves:"Antioxidante e pele luminosa",details:"Glutationa, antioxidante para uma pele mais luminosa."},
+{name:"Vida Glow Hairology",img:"images/sup-vidaglow-hair.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo e brilho",details:"Vida Glow para o cabelo, brilho e cuidado capilar."},
+{name:"Nutriplus by Farmasi",img:"images/sup-nutriplus.jpg",cat:"geral",price:"2.850 MT",serves:"Suplemento diário completo",details:"Nutriplus, suplemento diário completo para o bem-estar."},
+{name:"Whey Protein Isolate",img:"images/sup-whey.jpg",cat:"energia",price:"",serves:"Proteína para treino e músculo",details:"Proteína isolada para o treino, a recuperação e o músculo."},
+{name:"Seed DS-01 Simbiótico",img:"images/sup-seed.jpg",cat:"digestao",price:"",serves:"Simbiótico diário",details:"Simbiótico diário com prebióticos e probióticos para a digestão."},
+{name:"TrueBrain Nootropic",img:"images/sup-truebrain.jpg",cat:"foco",price:"",serves:"Foco e memória",details:"Nootrópico para foco, clareza e memória."},
+{name:"NOON Focus + Chill",img:"images/sup-noon.jpg",cat:"foco",price:"",serves:"Foco e calma",details:"Gomas para foco e calma, sem agitação."},
+{name:"THE NUE CO Pre + Probiotic",img:"images/sup-nueco1.jpg",cat:"digestao",price:"",serves:"Prebióticos e probióticos",details:"Prebióticos e probióticos para a saúde intestinal."},
+{name:"ODYN",img:"images/sup-odyn.jpg",cat:"geral",price:"",serves:"Suplemento diário",details:"Suplemento diário para o bem-estar geral."},
+{name:"Proper Immune Support",img:"images/sup-proper.jpg",cat:"imunidade",price:"",serves:"Apoio imunitário",details:"Pó superalimento com vitamina C, sabugueiro e papaia, para o apoio imunitário."},
+{name:"SinoPlaSan Meno Wunder + Venen Balance",img:"images/sup-sinoplasam.jpg",cat:"geral",price:"",serves:"Equilíbrio e circulação",details:"Meno Wunder e Venen Balance, com folhas de videira vermelha e castanha-da-índia, 120 cápsulas."},
+{name:"VIDA GLOW",img:"images/sup-vidaglow-verde.jpg",cat:"capilar",price:"",serves:"Cabelo e brilho",details:"VIDA GLOW em frasco verde, cápsulas para o cabelo e o brilho."},
+{name:"ELLAVita D3",img:"images/sup-ellavita-d3.jpg",cat:"ossos",price:"",serves:"Vitamina D3 + óleo de coco",details:"Vitamina D3 5000IU com óleo de coco, 60 softgels, suplemento alimentar."},
+{name:"energybits Espirulina",img:"images/sup-energybits-tubo.jpg",cat:"energia",price:"",serves:"Foco, fitness e energia",details:"Comprimidos de espirulina para foco, fitness e energia, 360 comprimidos."},
+{name:"VIBE OXIGLOW",img:"images/sup-vibe-oxiglow.jpg",cat:"pele",price:"",serves:"Saquetas verdes",details:"Saquetas VIBE OXIGLOW, suplemento em saqueta individual."},
+{name:"MAXX",img:"images/sup-maxx.jpg",cat:"energia",price:"",serves:"Pré-treino, creatina e BCAA",details:"MAXX: pré-treino, creatina pura e BCAA, para treino e recuperação."},
+{name:"AEMIS SPIRO PLUS",img:"images/sup-aemis-spiro.jpg",cat:"digestao",price:"",serves:"Enzimas digestivas e espirulina",details:"Pastilhas mastigáveis com enzimas digestivas, espirulina azul e espirulina verde."},
+{name:"HAIROLOGY VIDA GLOW",img:"images/sup-hairology-vidaglow.jpg",cat:"capilar",price:"2.850 MT",serves:"Cabelo, reparação avançada",details:"HAIROLOGY Advanced Repair, cápsulas para o cabelo, 30 cápsulas."},
+{name:"Vitaminicum Ferro Max",img:"images/sup-vitaminicum-ferro.jpg",cat:"imunidade",price:"",serves:"Ferro e vitaminas extra",details:"Ferro com LIPOFER, fonte de ferro e vitaminas extra, para cansaço e fadiga, imunidade e hemoglobina, 30 comprimidos."},
+];
+const grid=document.getElementById('grid');
+function render(f){
+  grid.innerHTML='';
+  products.filter(p=>f==='todos'||p.cat===f).forEach((p,i)=>{
+    const d=document.createElement('div');d.className='card';
+    d.innerHTML='<img src="'+p.img+'" alt="'+p.name+'"><h3>'+p.name+'</h3><p class="serves">'+p.serves+'</p>'+(p.price?'<span class="price">'+p.price+'</span><br>':'')+'<button class="details" onclick="openModal('+products.indexOf(p)+')">Ver detalhes</button>';
+    grid.appendChild(d);
+  });
+}
+function openModal(i){const p=products[i];document.getElementById('mimg').src=p.img;document.getElementById('mname').textContent=p.name;document.getElementById('mprice').innerHTML=p.price?'<span class="price">'+p.price+'</span>':'';document.getElementById('mserves').textContent=p.serves;document.getElementById('mdetails').textContent=p.details;document.getElementById('modal').classList.add('open');}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+document.querySelectorAll('#filters button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('#filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.f);};});
+render('todos');
+</script>
+</body>
+</html>
